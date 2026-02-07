@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "format:": "npx prettier --write ."
+    "format:": "npx prettier --write .",
+    "lint": "npx eslint . --max-warnings 0"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "@types/node": "^25.2.1",
     "eslint": "9.19.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.5.1",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "3.8.1",
     "typescript-eslint": "8.54.0"
