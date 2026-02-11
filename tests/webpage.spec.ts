@@ -4,7 +4,7 @@ import { HomePage } from '../src/pages/home.page';
 import { expect, test } from '@playwright/test';
 
 test.describe('Test', () => {
-  test('Home page title contains sentence "GAD"', async ({ page }) => {
+  test('Home page title contains sentence "GAD"', { tag: '@GAD-R01-01' }, async ({ page }) => {
     //Arrange
     const homePage = new HomePage(page);
     //Act
@@ -15,31 +15,35 @@ test.describe('Test', () => {
     expect(title).toContain('GAD');
   });
 
-  test('User can access without logging in to Articles and Comments pages', async ({
-    page,
-  }) => {
-    //Arrange
-    const articlesPage = new ArticlesPage(page);
+  test(
+    'User can access without logging in to Articles and Comments pages',
+    { tag: '@GAD-R01-02' },
+    async ({ page }) => {
+      //Arrange
+      const articlesPage = new ArticlesPage(page);
 
-    //Act
-    await articlesPage.goto();
+      //Act
+      await articlesPage.goto();
 
-    //Assert
-    const title = await articlesPage.title();
-    expect(title).toContain('Articles');
-  });
+      //Assert
+      const title = await articlesPage.title();
+      expect(title).toContain('Articles');
+    },
+  );
 
-  test('User can access without logging in to Comments pages', async ({
-    page,
-  }) => {
-    //Arrange
-    const commentsPage = new CommentsPage(page);
+  test(
+    'User can access without logging in to Comments pages',
+    { tag: '@GAD-R01-02' },
+    async ({ page }) => {
+      //Arrange
+      const commentsPage = new CommentsPage(page);
 
-    //Act
-    await commentsPage.goto();
+      //Act
+      await commentsPage.goto();
 
-    //Assert
-    const title = await commentsPage.title();
-    expect(title).toContain('Comments');
-  });
+      //Assert
+      const title = await commentsPage.title();
+      expect(title).toContain('Comments');
+    },
+  );
 });
