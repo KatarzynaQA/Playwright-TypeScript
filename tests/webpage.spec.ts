@@ -1,0 +1,45 @@
+import { ArticlesPage } from '../src/pages/articles.page';
+import { CommentsPage } from '../src/pages/comments.page';
+import { HomePage } from '../src/pages/home.page';
+import { expect, test } from '@playwright/test';
+
+test.describe('Test', () => {
+  test('Home page title contains sentence "GAD"', async ({ page }) => {
+    //Arrange
+    const homePage = new HomePage(page);
+    //Act
+    await homePage.goto();
+
+    //Assert
+    const title = await homePage.title();
+    expect(title).toContain('GAD');
+  });
+
+  test('User can access without logging in to Articles and Comments pages', async ({
+    page,
+  }) => {
+    //Arrange
+    const articlesPage = new ArticlesPage(page);
+
+    //Act
+    await articlesPage.goto();
+
+    //Assert
+    const title = await articlesPage.title();
+    expect(title).toContain('Articles');
+  });
+
+  test('User can access without logging in to Comments pages', async ({
+    page,
+  }) => {
+    //Arrange
+    const commentsPage = new CommentsPage(page);
+
+    //Act
+    await commentsPage.goto();
+
+    //Assert
+    const title = await commentsPage.title();
+    expect(title).toContain('Comments');
+  });
+});
