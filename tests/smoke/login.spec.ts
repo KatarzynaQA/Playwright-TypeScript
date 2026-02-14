@@ -1,12 +1,13 @@
 import { LoginPage } from '../../src/pages/login.page';
 import { WelcomePage } from '../../src/pages/welcome.page';
+import { userData } from '../../src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify user login to account', () => {
   test('User can login with correct credentials', { tag: '@GAD-R02 @S02' }, async ({ page }) => {
     // Arrange:
-    const userName = 'Moses.Armstrong@Feest.ca';
-    const userPassword = 'test1';
+    const userName = userData.userName;
+    const userPassword = userData.userPassword;
     const loginPage = new LoginPage(page);
 
     // Act:
