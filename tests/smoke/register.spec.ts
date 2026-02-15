@@ -1,0 +1,40 @@
+import { LoginPage } from '../../src/pages/login.page';
+import { RegisterPage } from '../../src/pages/register.page';
+import { WelcomePage } from '../../src/pages/welcome.page';
+import { expect, test } from '@playwright/test';
+
+test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
+  test(
+    'User can register to the service using required fields',
+    { tag: '@GAD-R03-01, @GAD-R03-02, @GAD-R03-03' },
+    async ({ page }) => {
+      // Arrange:
+      const userFirstName = 'jankkk';
+      const userLastName = 'test';
+      const userEmail = `jank${new Date().getDate()}@test.test`;
+      const password = '123pass';
+      const alertPopupText = 'User created';
+
+      const registerPage = new RegisterPage(page);
+
+      // Act:
+      await registerPage.goto();
+      await registerPage.registerUser(userFirstName, userLastName, userEmail, password);
+      await expect(registerPage.registerPageComponent.alertPopup).toHaveText(alertPopupText);
+
+      // Assert:
+      const loginPage = new LoginPage(page);
+      await loginPage.waitForPageLoadUrl();
+
+      const title = await loginPage.getTitle();
+      expect(title).toContain('Login');
+
+      //Assert
+      await loginPage.loginUser(userEmail, password);
+
+      const welcomePage = new WelcomePage(page);
+      const welcomeTitle = await welcomePage.getTitle();
+      expect(welcomeTitle).toContain('Welcome');
+    },
+  );
+});
