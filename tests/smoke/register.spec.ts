@@ -1,3 +1,4 @@
+import { RegisterUser } from '../../src/models/user.model';
 import { LoginPage } from '../../src/pages/login.page';
 import { RegisterPage } from '../../src/pages/register.page';
 import { WelcomePage } from '../../src/pages/welcome.page';
@@ -10,17 +11,28 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
     { tag: '@GAD-R03-01, @GAD-R03-02, @GAD-R03-03' },
     async ({ page }) => {
       // Arrange:
-      const userFirstName = faker.person.firstName().replace(/[^A-Za-z]/g, '');
-      const userLastName = faker.person.lastName().replace(/[^A-Za-z]/g, '');
-      const userEmail = faker.internet.email({ firstName: userFirstName });
-      const password = faker.internet.password();
+      // const userFirstName = faker.person.firstName().replace(/[^A-Za-z]/g, '');
+      // const userLastName = faker.person.lastName().replace(/[^A-Za-z]/g, '');
+      // const userEmail = faker.internet.email({ firstName: userFirstName });
+      // const password = faker.internet.password();
       const alertPopupText = 'User created';
+
+      const registerUserData: RegisterUser = {
+        userFirstName: faker.person.firstName().replace(/[^A-Za-z]/g, ''),
+        userLastName: faker.person.lastName().replace(/[^A-Za-z]/g, ''),
+        userEmail: '',
+        password: faker.internet.password(),
+      };
+
+      registerUserData.userEmail = faker.internet.email({
+        firstName: registerUserData.userFirstName,
+      });
 
       const registerPage = new RegisterPage(page);
 
       // Act:
       await registerPage.goto();
-      await registerPage.registerUser(userFirstName, userLastName, userEmail, password);
+      await registerPage.registerUser(registerUserData);
       await expect(registerPage.registerPageComponent.alertPopup).toHaveText(alertPopupText);
 
       // Assert:
@@ -31,7 +43,7 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
       expect(title).toContain('Login');
 
       //Assert
-      await loginPage.loginUser(userEmail, password);
+      await loginPage.loginUser(registerUserData.userEmail, registerUserData.password);
 
       const welcomePage = new WelcomePage(page);
       const welcomeTitle = await welcomePage.getTitle();
