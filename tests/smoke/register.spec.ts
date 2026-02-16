@@ -11,10 +11,6 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
     { tag: '@GAD-R03-01, @GAD-R03-02, @GAD-R03-03' },
     async ({ page }) => {
       // Arrange:
-      // const userFirstName = faker.person.firstName().replace(/[^A-Za-z]/g, '');
-      // const userLastName = faker.person.lastName().replace(/[^A-Za-z]/g, '');
-      // const userEmail = faker.internet.email({ firstName: userFirstName });
-      // const password = faker.internet.password();
       const alertPopupText = 'User created';
 
       const registerUserData: RegisterUser = {
