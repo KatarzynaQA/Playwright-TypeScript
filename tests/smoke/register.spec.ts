@@ -1,6 +1,7 @@
 import { LoginPage } from '../../src/pages/login.page';
 import { RegisterPage } from '../../src/pages/register.page';
 import { WelcomePage } from '../../src/pages/welcome.page';
+import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
@@ -9,10 +10,10 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
     { tag: '@GAD-R03-01, @GAD-R03-02, @GAD-R03-03' },
     async ({ page }) => {
       // Arrange:
-      const userFirstName = 'jankkk';
-      const userLastName = 'test';
-      const userEmail = `jank${new Date().getDate()}@test.test`;
-      const password = '123pass';
+      const userFirstName = faker.person.firstName();
+      const userLastName = faker.person.lastName();
+      const userEmail = faker.internet.email({ firstName: userFirstName });
+      const password = faker.internet.password();
       const alertPopupText = 'User created';
 
       const registerPage = new RegisterPage(page);
