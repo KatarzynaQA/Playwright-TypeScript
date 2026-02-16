@@ -13,12 +13,6 @@ export class LoginPage extends BasePage {
     this.errorLoginMessage = this.page.getByTestId('login-error');
   }
 
-  async incorrectLoginUser(userName: string, userPassword: string): Promise<void> {
-    await this.loginFormComponent.loginInput.fill(userName);
-    await this.loginFormComponent.passwordInput.fill(userPassword);
-    await this.loginFormComponent.logInButton.click();
-  }
-
   async loginUser(userLoginData: UserLogin): Promise<void> {
     await this.loginFormComponent.loginInput.fill(userLoginData.userName);
     await this.loginFormComponent.passwordInput.fill(userLoginData.userPassword);

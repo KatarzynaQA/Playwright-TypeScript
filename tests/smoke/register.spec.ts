@@ -39,7 +39,10 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
       expect(title).toContain('Login');
 
       //Assert
-      await loginPage.loginUser(registerUserData.userEmail, registerUserData.password);
+      await loginPage.loginUser({
+        userName: registerUserData.userEmail,
+        userPassword: registerUserData.password,
+      });
 
       const welcomePage = new WelcomePage(page);
       const welcomeTitle = await welcomePage.getTitle();
