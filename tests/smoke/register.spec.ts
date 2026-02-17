@@ -1,8 +1,7 @@
-import { RegisterUser } from '../../src/models/user.model';
+import { randomUserData } from '../../src/factories/user.factory';
 import { LoginPage } from '../../src/pages/login.page';
 import { RegisterPage } from '../../src/pages/register.page';
 import { WelcomePage } from '../../src/pages/welcome.page';
-import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
@@ -13,17 +12,7 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
       // Arrange:
       const alertPopupText = 'User created';
 
-      const registerUserData: RegisterUser = {
-        userFirstName: faker.person.firstName().replace(/[^A-Za-z]/g, ''),
-        userLastName: faker.person.lastName().replace(/[^A-Za-z]/g, ''),
-        userEmail: '',
-        password: faker.internet.password(),
-      };
-
-      registerUserData.userEmail = faker.internet.email({
-        firstName: registerUserData.userFirstName,
-      });
-
+      const registerUserData = randomUserData();
       const registerPage = new RegisterPage(page);
 
       // Act:
