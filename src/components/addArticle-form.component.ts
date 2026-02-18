@@ -1,3 +1,4 @@
+import { NewArticleData } from '../models/article.model';
 import { Locator, Page } from '@playwright/test';
 
 export class AddArticleFormComponent {
@@ -13,9 +14,9 @@ export class AddArticleFormComponent {
     this.saveAlertPopup = this.page.getByTestId('alert-popup');
   }
 
-  async createNewArticle(title: string, articleBody: string): Promise<void> {
-    await this.titleInput.fill(title);
-    await this.bodyArticleText.fill(articleBody);
+  async createNewArticle(newArticleData: NewArticleData): Promise<void> {
+    await this.titleInput.fill(newArticleData.articleTitle);
+    await this.bodyArticleText.fill(newArticleData.articleBody);
     await this.saveArticleButton.click();
   }
 }
