@@ -1,3 +1,4 @@
+import { randomArticleData } from '../../src/factories/article.factory copy';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
 import { LoginPage } from '../../src/pages/login.page';
@@ -19,14 +20,15 @@ test.describe('Verify articles page', () => {
 
     // Act:
     await articlesPage.addArticleButton.click();
-    const newArticleTitle = 'new article title';
-    await articlesPage.addArticleFormComponent.createNewArticle(newArticleTitle, 'body xd');
+
+    const articleData = randomArticleData();
+    await articlesPage.addArticleFormComponent.createNewArticle(articleData);
 
     // Assert:
-    await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
-      'Article was created',
-    );
+    await expect
+      .soft(articlesPage.addArticleFormComponent.saveAlertPopup)
+      .toHaveText('Article was created');
 
-    await expect(articlePage.articleTitle).toHaveText(newArticleTitle);
+    await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
   });
 });
