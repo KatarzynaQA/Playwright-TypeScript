@@ -1,9 +1,12 @@
 import { BasePage } from './base.page';
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 export class WelcomePage extends BasePage {
   url = '/welcome';
+  articleButton: Locator;
+
   constructor(page: Page) {
     super(page);
+    this.articleButton = this.page.getByTestId('open-articles');
   }
 }

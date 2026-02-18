@@ -1,0 +1,32 @@
+import { ArticlePage } from '../../src/pages/article.page';
+import { ArticlesPage } from '../../src/pages/articles.page';
+import { LoginPage } from '../../src/pages/login.page';
+import { WelcomePage } from '../../src/pages/welcome.page';
+import { userData } from '../../src/test-data/user.data';
+import { expect, test } from '@playwright/test';
+
+test.describe('Verify articles page', () => {
+  test('User can create a new article', { tag: '@GAD-R04-01' }, async ({ page }) => {
+    // Arrange:
+    const loginPage = new LoginPage(page);
+    const articlesPage = new ArticlesPage(page);
+    const welcomePage = new WelcomePage(page);
+    const articlePage = new ArticlePage(page);
+
+    await loginPage.goto();
+    await loginPage.loginUser(userData);
+    await welcomePage.articleButton.click();
+
+    // Act:
+    await articlesPage.addArticleButton.click();
+    const newArticleTitle = 'new article title';
+    await articlesPage.addArticleFormComponent.createNewArticle(newArticleTitle, 'body xd');
+
+    // Assert:
+    await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
+      'Article was created',
+    );
+
+    await expect(articlePage.articleTitle).toHaveText(newArticleTitle);
+  });
+});
