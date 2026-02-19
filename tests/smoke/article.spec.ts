@@ -1,4 +1,5 @@
 import { randomArticleData } from '../../src/factories/article.factory copy';
+import { NewArticleData } from '../../src/models/article.model';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
 import { LoginPage } from '../../src/pages/login.page';
@@ -7,11 +8,21 @@ import { userData } from '../../src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles page', () => {
+  let loginPage: LoginPage;
+  let articlesPage: ArticlesPage;
+  let welcomePage: WelcomePage;
+  let articleData: NewArticleData;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    articlesPage = new ArticlesPage(page);
+    welcomePage = new WelcomePage(page);
+
+    articleData = randomArticleData();
+  });
+
   test('User can create a new article', { tag: '@GAD-R04-01' }, async ({ page }) => {
     // Arrange:
-    const loginPage = new LoginPage(page);
-    const articlesPage = new ArticlesPage(page);
-    const welcomePage = new WelcomePage(page);
     const articlePage = new ArticlePage(page);
 
     await loginPage.goto();
@@ -20,8 +31,6 @@ test.describe('Verify articles page', () => {
 
     // Act:
     await articlesPage.addArticleButton.click();
-
-    const articleData = randomArticleData();
     await articlesPage.addArticleFormComponent.createNewArticle(articleData);
 
     // Assert:
@@ -32,15 +41,11 @@ test.describe('Verify articles page', () => {
     await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
   });
 
-  test('Should not add article with empty title', async ({ page }) => {
+  test('Should not add article with empty title', async () => {
     // Arrange:
-    const loginPage = new LoginPage(page);
-    const articlesPage = new ArticlesPage(page);
-    const welcomePage = new WelcomePage(page);
-    const articleData = randomArticleData();
-    articleData.articleTitle = '';
-
     const expectedErrorMessage = 'Article was not created';
+
+    articleData.articleTitle = '';
 
     await loginPage.goto();
     await loginPage.loginUser(userData);
@@ -56,15 +61,11 @@ test.describe('Verify articles page', () => {
     );
   });
 
-  test('Should not add article with empty body', async ({ page }) => {
+  test('Should not add article with empty body', async () => {
     // Arrange:
-    const loginPage = new LoginPage(page);
-    const articlesPage = new ArticlesPage(page);
-    const welcomePage = new WelcomePage(page);
-    const articleData = randomArticleData();
-    articleData.articleBody = '';
-
     const expectedErrorMessage = 'Article was not created';
+
+    articleData.articleBody = '';
 
     await loginPage.goto();
     await loginPage.loginUser(userData);
