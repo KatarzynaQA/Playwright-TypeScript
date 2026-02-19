@@ -31,4 +31,52 @@ test.describe('Verify articles page', () => {
 
     await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
   });
+
+  test('Should not add article with empty title', async ({ page }) => {
+    // Arrange:
+    const loginPage = new LoginPage(page);
+    const articlesPage = new ArticlesPage(page);
+    const welcomePage = new WelcomePage(page);
+    const articleData = randomArticleData();
+    articleData.articleTitle = '';
+
+    const expectedErrorMessage = 'Article was not created';
+
+    await loginPage.goto();
+    await loginPage.loginUser(userData);
+    await welcomePage.articleButton.click();
+
+    // Act:
+    await articlesPage.addArticleButton.click();
+    await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+
+    // Assert:
+    await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
+      expectedErrorMessage,
+    );
+  });
+
+  test('Should not add article with empty body', async ({ page }) => {
+    // Arrange:
+    const loginPage = new LoginPage(page);
+    const articlesPage = new ArticlesPage(page);
+    const welcomePage = new WelcomePage(page);
+    const articleData = randomArticleData();
+    articleData.articleBody = '';
+
+    const expectedErrorMessage = 'Article was not created';
+
+    await loginPage.goto();
+    await loginPage.loginUser(userData);
+    await welcomePage.articleButton.click();
+
+    // Act:
+    await articlesPage.addArticleButton.click();
+    await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+
+    // Assert:
+    await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
+      expectedErrorMessage,
+    );
+  });
 });
