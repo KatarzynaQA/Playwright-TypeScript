@@ -9,7 +9,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe.configure({ mode: 'serial' });
 
-test.describe('Create and verify article', () => {
+test.describe('Create, verify and delete article', () => {
   let loginPage: LoginPage;
   let articlesPage: ArticlesPage;
   let welcomePage: WelcomePage;
@@ -54,5 +54,21 @@ test.describe('Create and verify article', () => {
 
     // Assert:
     await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
+  });
+
+  test('User can delete his own article', { tag: '@GAD-R04-04' }, async () => {
+    // Arrange:
+    await loginPage.goto();
+    await loginPage.loginUser(userData);
+    await articlesPage.goto();
+    await articlesPage.goToArticle(articleData.articleTitle);
+
+    // Act:
+    await articlePage.clickDeleteButton();
+
+    // Assert:
+    await articlesPage.waitForPageLoadUrl();
+    const title = await articlesPage.getTitle();
+    expect(title).toContain('Articles');
   });
 });
