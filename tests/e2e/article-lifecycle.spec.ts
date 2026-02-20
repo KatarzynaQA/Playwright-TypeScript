@@ -23,7 +23,7 @@ test.describe('Create and verify article', () => {
     articlePage = new ArticlePage(page);
   });
 
-  test('User can create a new article', { tag: '@GAD-R04-01' }, async ({ page }) => {
+  test('User can create a new article', { tag: '@GAD-R04-01' }, async () => {
     // Arrange:
     articleData = randomArticleData();
 
@@ -43,7 +43,7 @@ test.describe('Create and verify article', () => {
     await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
   });
 
-  test('User can access single article', { tag: '@GAD-R04-03' }, async ({ page }) => {
+  test('User can access single article', { tag: '@GAD-R04-03' }, async () => {
     // Arrange:
     await loginPage.goto();
     await loginPage.loginUser(userData);
