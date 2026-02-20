@@ -1,8 +1,12 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 export class BasePage {
   url = '/';
-  constructor(protected page: Page) {}
+  articlesButton: Locator;
+
+  constructor(protected page: Page) {
+    this.articlesButton = this.page.getByTestId('open-articles');
+  }
 
   async goto(): Promise<void> {
     await this.page.goto(this.url);
@@ -14,5 +18,9 @@ export class BasePage {
 
   async waitForPageLoadUrl(): Promise<void> {
     await this.page.waitForURL(this.url);
+  }
+
+  async clickArticlesButton(): Promise<void> {
+    await this.articlesButton.click();
   }
 }

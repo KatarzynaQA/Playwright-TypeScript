@@ -1,7 +1,7 @@
-import { randomUserData } from '../../src/factories/user.factory';
-import { LoginPage } from '../../src/pages/login.page';
-import { RegisterPage } from '../../src/pages/register.page';
-import { WelcomePage } from '../../src/pages/welcome.page';
+import { randomUserData } from '../src/factories/user.factory';
+import { LoginPage } from '../src/pages/login.page';
+import { RegisterPage } from '../src/pages/register.page';
+import { WelcomePage } from '../src/pages/welcome.page';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {

@@ -13,4 +13,8 @@ export class ArticlesPage extends BasePage {
     super(page);
     this.addArticleButton = this.page.getByRole('button', { name: 'Add Article' });
   }
+
+  async goToArticle(articleTitle: string): Promise<void> {
+    await this.page.getByText(articleTitle).click();
+  }
 }
