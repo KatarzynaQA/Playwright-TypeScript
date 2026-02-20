@@ -56,7 +56,7 @@ test.describe('Create, verify and delete article', () => {
     await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
   });
 
-  test('User can delete his own article', { tag: '@GAD-R04-04' }, async ({ page }) => {
+  test('User can delete his own article', { tag: '@GAD-R04-04' }, async () => {
     // Arrange:
     await loginPage.goto();
     await loginPage.loginUser(userData);
