@@ -3,11 +3,21 @@ import { CommentsPage } from '../../src/pages/comments.page';
 import { HomePage } from '../../src/pages/home.page';
 import { test as baseTest, expect } from '@playwright/test';
 
-const test = baseTest.extend<{ articlesPage: ArticlesPage }>({
+interface Pages {
+  articlesPage: ArticlesPage;
+  commentsPage: CommentsPage;
+}
+const test = baseTest.extend<Pages>({
   articlesPage: async ({ page }, use) => {
     const articlesPage = new ArticlesPage(page);
     await articlesPage.goto();
     await use(articlesPage);
+  },
+
+  commentsPage: async ({ page }, use) => {
+    const commentsPage = new CommentsPage(page);
+    await commentsPage.goto();
+    await use(commentsPage);
   },
 });
 
@@ -15,46 +25,49 @@ test.describe('Verify main menu button', () => {
   test(
     'Comments button navigates to comments page',
     { tag: '@GAD-R01-03' },
-    async ({ page, articlesPage }) => {
+    async ({ commentsPage, articlesPage }) => {
       // Arrange:
-      const commentsPage = new CommentsPage(page);
+      const expectedTitle = 'Comments';
 
       // Act:
       await articlesPage.mainMenuComponent.commentsButton.click();
       const title = await commentsPage.getTitle();
 
       // Assert:
-      expect(title).toContain('Comments');
+      expect(title).toContain(expectedTitle);
     },
   );
 
-  test('Articles button navigates to articles page', { tag: '@GAD-R01-03' }, async ({ page }) => {
-    // Arrange:
-    const articlesPage = new ArticlesPage(page);
-    const commentsPage = new CommentsPage(page);
+  test(
+    'Articles button navigates to articles page',
+    { tag: '@GAD-R01-03' },
+    async ({ articlesPage, commentsPage }) => {
+      // Arrange:
+      const expectedTitle = 'Articles';
 
-    // Act:
-    await commentsPage.goto();
-    await commentsPage.mainMenuComponent.articlesButton.click();
-    const title = await articlesPage.getTitle();
+      // Act:
+      await commentsPage.mainMenuComponent.articlesButton.click();
+      const title = await articlesPage.getTitle();
 
-    // Assert:
-    expect(title).toContain('Articles');
-  });
+      // Assert:
+      expect(title).toContain(expectedTitle);
+    },
+  );
 
-  test('Home page button navigates to main page', { tag: '@GAD-R01-03' }, async ({ page }) => {
-    // Arrange:
-    const articlesPage = new ArticlesPage(page);
-    const homePage = new HomePage(page);
+  test(
+    'Home page button navigates to main page',
+    { tag: '@GAD-R01-03' },
+    async ({ page, articlesPage }) => {
+      // Arrange:
+      const homePage = new HomePage(page);
+      const expectedTitle = 'GAD';
 
-    // const commentsPage = new CommentsPage(page);
+      // Act:
+      await articlesPage.mainMenuComponent.clickHomePageLink();
+      const title = await homePage.getTitle();
 
-    // Act:
-    await articlesPage.goto();
-    await articlesPage.mainMenuComponent.homePageLink.click();
-    const title = await homePage.getTitle();
-
-    // Assert:
-    expect(title).toContain('GAD');
-  });
+      // Assert:
+      expect(title).toContain(expectedTitle);
+    },
+  );
 });
