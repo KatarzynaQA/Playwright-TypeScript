@@ -10,4 +10,8 @@ export class MainMenuComponent {
     this.articlesButton = this.page.getByTestId('open-articles');
     this.homePageLink = this.page.getByRole('link', { name: '🦎 GAD' });
   }
+
+  async clickHomePageLink(): Promise<void> {
+    await this.homePageLink.click();
+  }
 }
