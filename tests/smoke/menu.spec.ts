@@ -1,5 +1,4 @@
 import { expect, test } from '../../src/fixtures/merge.fixture';
-import { HomePage } from '../../src/pages/home.page';
 
 test.describe('Verify main menu button', () => {
   test(
@@ -37,9 +36,8 @@ test.describe('Verify main menu button', () => {
   test(
     'Home page button navigates to main page',
     { tag: '@GAD-R01-03' },
-    async ({ page, articlesPage }) => {
+    async ({ articlesPage, homePage }) => {
       // Arrange:
-      const homePage = new HomePage(page);
       const expectedTitle = 'GAD';
 
       // Act:
