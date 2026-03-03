@@ -1,25 +1,4 @@
-import { ArticlesPage } from '../../src/pages/articles.page';
-import { CommentsPage } from '../../src/pages/comments.page';
-import { HomePage } from '../../src/pages/home.page';
-import { test as baseTest, expect } from '@playwright/test';
-
-interface Pages {
-  articlesPage: ArticlesPage;
-  commentsPage: CommentsPage;
-}
-const test = baseTest.extend<Pages>({
-  articlesPage: async ({ page }, use) => {
-    const articlesPage = new ArticlesPage(page);
-    await articlesPage.goto();
-    await use(articlesPage);
-  },
-
-  commentsPage: async ({ page }, use) => {
-    const commentsPage = new CommentsPage(page);
-    await commentsPage.goto();
-    await use(commentsPage);
-  },
-});
+import { expect, test } from '../../src/fixtures/merge.fixture';
 
 test.describe('Verify main menu button', () => {
   test(
@@ -57,9 +36,8 @@ test.describe('Verify main menu button', () => {
   test(
     'Home page button navigates to main page',
     { tag: '@GAD-R01-03' },
-    async ({ page, articlesPage }) => {
+    async ({ articlesPage, homePage }) => {
       // Arrange:
-      const homePage = new HomePage(page);
       const expectedTitle = 'GAD';
 
       // Act:
