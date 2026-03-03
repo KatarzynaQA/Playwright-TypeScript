@@ -1,25 +1,5 @@
-import { ArticlesPage } from '../../src/pages/articles.page';
-import { CommentsPage } from '../../src/pages/comments.page';
+import { expect, test } from '../../src/fixtures/merge.fixture';
 import { HomePage } from '../../src/pages/home.page';
-import { test as baseTest, expect } from '@playwright/test';
-
-interface Pages {
-  articlesPage: ArticlesPage;
-  commentsPage: CommentsPage;
-}
-const test = baseTest.extend<Pages>({
-  articlesPage: async ({ page }, use) => {
-    const articlesPage = new ArticlesPage(page);
-    await articlesPage.goto();
-    await use(articlesPage);
-  },
-
-  commentsPage: async ({ page }, use) => {
-    const commentsPage = new CommentsPage(page);
-    await commentsPage.goto();
-    await use(commentsPage);
-  },
-});
 
 test.describe('Verify main menu button', () => {
   test(
