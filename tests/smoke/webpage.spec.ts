@@ -4,8 +4,6 @@ test.describe('Test', () => {
   test('Home page title contains sentence "GAD"', { tag: '@GAD-R01-01' }, async ({ homePage }) => {
     //Arrange
     //Act
-    // await homePage.goto();
-
     //Assert
     const title = await homePage.getTitle();
     expect(title).toContain('GAD');
@@ -16,10 +14,12 @@ test.describe('Test', () => {
     { tag: '@GAD-R01-02' },
     async ({ articlesPage }) => {
       //Arrange
+      const expectedPageTitle = 'Articles';
+
       //Act
       //Assert
       const title = await articlesPage.getTitle();
-      expect(title).toContain('Articles');
+      expect(title).toContain(expectedPageTitle);
     },
   );
 
@@ -28,10 +28,12 @@ test.describe('Test', () => {
     { tag: '@GAD-R01-02' },
     async ({ commentsPage }) => {
       //Arrange
+      const expectedPageTitle = 'Comments';
+
       //Act
       //Assert
       const title = await commentsPage.getTitle();
-      expect(title).toContain('Comments');
+      expect(title).toContain(expectedPageTitle);
     },
   );
 });

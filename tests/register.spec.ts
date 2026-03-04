@@ -11,6 +11,8 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
     async ({ page }) => {
       // Arrange:
       const expectPopupText = 'User created';
+      const expectedLoginPageTitle = 'Login';
+      const expectedWelcomePageTitle = 'Welcome';
 
       const loginPage = new LoginPage(page);
       const welcomePage = new WelcomePage(page);
@@ -27,7 +29,7 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
       await loginPage.waitForPageLoadUrl();
 
       const title = await loginPage.getTitle();
-      expect(title).toContain('Login');
+      expect(title).toContain(expectedLoginPageTitle);
 
       //Assert
       await loginPage.loginUser({
@@ -36,7 +38,7 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
       });
 
       const welcomeTitle = await welcomePage.getTitle();
-      expect(welcomeTitle).toContain('Welcome');
+      expect(welcomeTitle).toContain(expectedWelcomePageTitle);
     },
   );
 });

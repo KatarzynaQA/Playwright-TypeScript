@@ -26,6 +26,7 @@ test.describe('Create, verify and delete article', () => {
   test('User can create a new article', { tag: '@GAD-R04-01' }, async () => {
     // Arrange:
     articleData = prepareRandomArticleData();
+    const expectedSuccessMessage = 'Article was created';
 
     await loginPage.goto();
     await loginPage.loginUser(userData);
@@ -38,7 +39,7 @@ test.describe('Create, verify and delete article', () => {
     // Assert:
     await expect
       .soft(articlesPage.addArticleFormComponent.saveAlertPopup)
-      .toHaveText('Article was created');
+      .toHaveText(expectedSuccessMessage);
 
     await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
   });
@@ -58,6 +59,8 @@ test.describe('Create, verify and delete article', () => {
 
   test('User can delete his own article', { tag: '@GAD-R04-04' }, async () => {
     // Arrange:
+    const expectedPageTitle = 'Articles';
+
     await loginPage.goto();
     await loginPage.loginUser(userData);
     await articlesPage.goto();
@@ -69,6 +72,6 @@ test.describe('Create, verify and delete article', () => {
     // Assert:
     await articlesPage.waitForPageLoadUrl();
     const title = await articlesPage.getTitle();
-    expect(title).toContain('Articles');
+    expect(title).toContain(expectedPageTitle);
   });
 });
