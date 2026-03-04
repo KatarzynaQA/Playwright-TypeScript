@@ -1,6 +1,7 @@
 import { UserLoginModel } from '../models/userLogin.model';
+import { USER_NAME, USER_PASSWORD } from '../test-data/env.config';
 
 export const userData: UserLoginModel = {
-  userName: process.env.USER_NAME ?? '[NOT SET]',
-  userPassword: process.env.USER_PASSWORD ?? '[NOT SET]',
+  userName: USER_NAME,
+  userPassword: USER_PASSWORD,
 };
