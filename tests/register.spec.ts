@@ -1,4 +1,4 @@
-import { randomUserData } from '../src/factories/user.factory';
+import { prepareRandomUserData } from '../src/factories/user.factory';
 import { LoginPage } from '../src/pages/login.page';
 import { RegisterPage } from '../src/pages/register.page';
 import { WelcomePage } from '../src/pages/welcome.page';
@@ -16,7 +16,7 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
       const welcomePage = new WelcomePage(page);
       const registerPage = new RegisterPage(page);
 
-      const registerUserData = randomUserData();
+      const registerUserData = prepareRandomUserData();
 
       // Act:
       await registerPage.goto();

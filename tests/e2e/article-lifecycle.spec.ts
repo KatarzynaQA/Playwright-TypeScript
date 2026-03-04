@@ -1,4 +1,4 @@
-import { randomArticleData } from '../../src/factories/article.factory copy';
+import { prepareRandomArticleData } from '../../src/factories/article.factory copy';
 import { NewArticleDataModel } from '../../src/models/article.model';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
@@ -25,7 +25,7 @@ test.describe('Create, verify and delete article', () => {
 
   test('User can create a new article', { tag: '@GAD-R04-01' }, async () => {
     // Arrange:
-    articleData = randomArticleData();
+    articleData = prepareRandomArticleData();
 
     await loginPage.goto();
     await loginPage.loginUser(userData);
