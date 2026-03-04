@@ -1,5 +1,5 @@
-import { randomArticleData } from '../../src/factories/article.factory copy';
-import { NewArticleData } from '../../src/models/article.model';
+import { prepareRandomArticleData } from '../../src/factories/article.factory copy';
+import { NewArticleDataModel } from '../../src/models/article.model';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
 import { LoginPage } from '../../src/pages/login.page';
@@ -14,7 +14,7 @@ test.describe('Create, verify and delete article', () => {
   let articlesPage: ArticlesPage;
   let welcomePage: WelcomePage;
   let articlePage: ArticlePage;
-  let articleData: NewArticleData;
+  let articleData: NewArticleDataModel;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
@@ -25,7 +25,8 @@ test.describe('Create, verify and delete article', () => {
 
   test('User can create a new article', { tag: '@GAD-R04-01' }, async () => {
     // Arrange:
-    articleData = randomArticleData();
+    articleData = prepareRandomArticleData();
+    const expectedSuccessMessage = 'Article was created';
 
     await loginPage.goto();
     await loginPage.loginUser(userData);
@@ -38,7 +39,7 @@ test.describe('Create, verify and delete article', () => {
     // Assert:
     await expect
       .soft(articlesPage.addArticleFormComponent.saveAlertPopup)
-      .toHaveText('Article was created');
+      .toHaveText(expectedSuccessMessage);
 
     await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
   });
@@ -58,6 +59,8 @@ test.describe('Create, verify and delete article', () => {
 
   test('User can delete his own article', { tag: '@GAD-R04-04' }, async () => {
     // Arrange:
+    const expectedPageTitle = 'Articles';
+
     await loginPage.goto();
     await loginPage.loginUser(userData);
     await articlesPage.goto();
@@ -69,6 +72,6 @@ test.describe('Create, verify and delete article', () => {
     // Assert:
     await articlesPage.waitForPageLoadUrl();
     const title = await articlesPage.getTitle();
-    expect(title).toContain('Articles');
+    expect(title).toContain(expectedPageTitle);
   });
 });

@@ -1,4 +1,4 @@
-import { randomArticleData } from '../src/factories/article.factory copy';
+import { prepareRandomArticleData } from '../src/factories/article.factory copy';
 import { ArticlePage } from '../src/pages/article.page';
 import { ArticlesPage } from '../src/pages/articles.page';
 import { LoginPage } from '../src/pages/login.page';
@@ -20,7 +20,7 @@ test.describe('Verify articles page', () => {
   test('Should not add article with empty title', { tag: '@GAD-R04' }, async () => {
     // Arrange:
     const expectedErrorMessage = 'Article was not created';
-    const articleData = randomArticleData();
+    const articleData = prepareRandomArticleData();
     articleData.articleTitle = '';
 
     await loginPage.goto();
@@ -41,7 +41,7 @@ test.describe('Verify articles page', () => {
     // Arrange:
     const expectedErrorMessage = 'Article was not created';
 
-    const articleData = randomArticleData();
+    const articleData = prepareRandomArticleData();
     articleData.articleBody = '';
 
     await loginPage.goto();
@@ -61,7 +61,7 @@ test.describe('Verify articles page', () => {
   test('Article title should not exceed 128 signs', { tag: '@GAD-R04-02' }, async () => {
     // Arrange:
     const expectedErrorMessage = 'Article was not created';
-    const articleData = randomArticleData(129);
+    const articleData = prepareRandomArticleData(129);
 
     await loginPage.goto();
     await loginPage.loginUser(userData);
@@ -81,7 +81,7 @@ test.describe('Verify articles page', () => {
     // Arrange:
     const expectedErrorMessage = 'Article was created';
     const articlePage = new ArticlePage(page);
-    const articleData = randomArticleData(128);
+    const articleData = prepareRandomArticleData(128);
 
     await loginPage.goto();
     await loginPage.loginUser(userData);
