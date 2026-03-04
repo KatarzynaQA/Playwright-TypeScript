@@ -1,5 +1,6 @@
-import { prepareRandomArticleData } from '../../src/factories/article.factory copy';
-import { NewArticleDataModel } from '../../src/models/article.model';
+import { prepareRandomArticleData } from '../../src/factories/article.factory';
+import { prepareRandomCommentData } from '../../src/factories/comment.factory';
+import { AddArticleModel } from '../../src/models/article.model';
 import { AddCommentPage } from '../../src/pages/add-comment.page';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
@@ -16,7 +17,7 @@ test.describe('Create, verify and delete comment', () => {
   let articlesPage: ArticlesPage;
   let welcomePage: WelcomePage;
   let articlePage: ArticlePage;
-  let articleData: NewArticleDataModel;
+  let articleData: AddArticleModel;
   let addCommentPage: AddCommentPage;
   let commentPage: CommentPage;
 
@@ -39,20 +40,21 @@ test.describe('Create, verify and delete comment', () => {
   test('User can create a new comment', { tag: '@GAD-R05-01, @GAD-R05-02' }, async () => {
     // Arrange:
     const expectedSaveMessage = 'Comment was created';
-    const commentText = 'Hello!';
+
+    const newCommentBody = prepareRandomCommentData();
 
     // Act:
     await articlePage.addCommentsButton.click();
-    await addCommentPage.commentBody.fill(commentText);
+    await addCommentPage.commentBody.fill(newCommentBody.commentBody);
     await addCommentPage.clickSaveButton();
 
     // Assert:
     await expect(articlesPage.saveAlertPopup).toHaveText(expectedSaveMessage);
 
-    const articleComment = articlePage.getArticleComment(commentText);
-    await expect(articleComment.body).toHaveText(commentText);
+    const articleComment = articlePage.getArticleComment(newCommentBody.commentBody);
+    await expect(articleComment.body).toHaveText(newCommentBody.commentBody);
     await articleComment.link.click();
 
-    await expect(commentPage.commentBody).toHaveText(commentText);
+    await expect(commentPage.commentBody).toHaveText(newCommentBody.commentBody);
   });
 });
