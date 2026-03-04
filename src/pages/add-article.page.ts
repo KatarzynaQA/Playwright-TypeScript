@@ -6,12 +6,14 @@ export class ArticlePage extends BasePage {
   articleTitle: Locator;
   articleBody: Locator;
   deleteButton: Locator;
+  addCommentsButton: Locator;
 
   constructor(page: Page) {
     super(page);
     this.articleTitle = this.page.getByTestId('article-title');
     this.articleBody = this.page.getByTestId('article-body');
     this.deleteButton = this.page.getByTestId('delete');
+    this.addCommentsButton = this.page.locator('#add-new');
   }
 
   async clickDeleteButton(): Promise<void> {
