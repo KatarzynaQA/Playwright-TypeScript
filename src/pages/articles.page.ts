@@ -1,4 +1,4 @@
-import { AddArticleFormComponent } from '../components/addArticle-form.component';
+import { AddArticleFormComponent } from '../components/add-article-form.component';
 import { MainMenuComponent } from '../components/main-menu.component';
 import { BasePage } from './base.page';
 import { Locator, Page } from '@playwright/test';

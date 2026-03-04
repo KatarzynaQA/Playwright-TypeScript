@@ -1,6 +1,6 @@
 import { prepareRandomArticleData } from '../../src/factories/article.factory copy';
 import { NewArticleDataModel } from '../../src/models/article.model';
-import { ArticlePage } from '../../src/pages/add-article.page';
+import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
 import { LoginPage } from '../../src/pages/login.page';
 import { WelcomePage } from '../../src/pages/welcome.page';

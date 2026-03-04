@@ -1,6 +1,11 @@
 import { BasePage } from './base.page';
 import { Locator, Page } from '@playwright/test';
 
+interface ArticleComment {
+  body: Locator;
+  link: Locator;
+}
+
 export class ArticlePage extends BasePage {
   url = '/article.html';
   articleTitle: Locator;
@@ -21,5 +26,16 @@ export class ArticlePage extends BasePage {
       await dialog.accept();
     });
     await this.deleteButton.click();
+  }
+
+  getArticleComment(bodyComment: string): ArticleComment {
+    const commentContainer = this.page
+      .locator('.comment-container')
+      .filter({ hasText: bodyComment });
+
+    return {
+      body: commentContainer.locator(':text("comment:") + span'),
+      link: commentContainer.locator("[id^='gotoComment']"),
+    };
   }
 }
