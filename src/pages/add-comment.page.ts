@@ -1,13 +1,11 @@
-import { BasePage } from './base.page';
+import { AddCommentModel } from '../models/comment.model';
 import { Locator, Page } from '@playwright/test';
 
-export class AddCommentPage extends BasePage {
-  url = '/article.html';
+export class AddCommentPage {
   commentBody: Locator;
   saveButton: Locator;
 
-  constructor(page: Page) {
-    super(page);
+  constructor(private page: Page) {
     this.commentBody = this.page.locator('#body');
     this.saveButton = this.page.getByRole('button', { name: 'Save' });
   }
@@ -16,6 +14,11 @@ export class AddCommentPage extends BasePage {
     this.page.on('dialog', async (dialog) => {
       await dialog.accept();
     });
+    await this.saveButton.click();
+  }
+
+  async createComment(commentData: AddCommentModel): Promise<void> {
+    await this.commentBody.fill(commentData.commentBody);
     await this.saveButton.click();
   }
 }

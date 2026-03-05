@@ -5,6 +5,7 @@ import { AddCommentPage } from '../../src/pages/add-comment.page';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
 import { CommentPage } from '../../src/pages/comment.page';
+import { EditCommentPage } from '../../src/pages/edit-comment.page';
 import { LoginPage } from '../../src/pages/login.page';
 import { WelcomePage } from '../../src/pages/welcome.page';
 import { userData } from '../../src/test-data/user.data';
@@ -20,6 +21,7 @@ test.describe('Create, verify and delete comment', () => {
   let articleData: AddArticleModel;
   let addCommentPage: AddCommentPage;
   let commentPage: CommentPage;
+  let editCommentPage: EditCommentPage;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
@@ -28,6 +30,7 @@ test.describe('Create, verify and delete comment', () => {
     articlePage = new ArticlePage(page);
     addCommentPage = new AddCommentPage(page);
     commentPage = new CommentPage(page);
+    editCommentPage = new EditCommentPage(page);
 
     articleData = prepareRandomArticleData();
     await loginPage.goto();
@@ -40,13 +43,13 @@ test.describe('Create, verify and delete comment', () => {
   test('User can create a new comment', { tag: '@GAD-R05-01, @GAD-R05-02' }, async () => {
     // Arrange:
     const expectedSaveMessage = 'Comment was created';
+    const expectedUpdatedPopupText = 'Comment was updated';
 
     const newCommentBody = prepareRandomCommentData();
 
     // Act:
     await articlePage.addCommentsButton.click();
-    await addCommentPage.commentBody.fill(newCommentBody.commentBody);
-    await addCommentPage.clickSaveButton();
+    await addCommentPage.createComment(newCommentBody);
 
     // Assert:
     await expect(articlesPage.saveAlertPopup).toHaveText(expectedSaveMessage);
@@ -56,5 +59,19 @@ test.describe('Create, verify and delete comment', () => {
     await articleComment.link.click();
 
     await expect(commentPage.commentBody).toHaveText(newCommentBody.commentBody);
+
+    //Edit comment
+    const editedCommentBody = prepareRandomCommentData();
+
+    await commentPage.clickEditCommentButton();
+    await editCommentPage.updateCommentBody(editedCommentBody);
+
+    await expect(commentPage.updatedAlertPopup).toHaveText(expectedUpdatedPopupText);
+    await expect(commentPage.commentBody).toHaveText(editedCommentBody.commentBody);
+
+    commentPage.clickReturnLink();
+
+    const updatedArticleComment = articlePage.getArticleComment(editedCommentBody.commentBody);
+    await expect(updatedArticleComment.body).toHaveText(editedCommentBody.commentBody);
   });
 });
