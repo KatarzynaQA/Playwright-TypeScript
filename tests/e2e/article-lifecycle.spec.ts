@@ -1,5 +1,5 @@
-import { prepareRandomArticleData } from '../../src/factories/article.factory copy';
-import { NewArticleDataModel } from '../../src/models/article.model';
+import { prepareRandomArticleData } from '../../src/factories/article.factory';
+import { AddArticleModel } from '../../src/models/article.model';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
 import { LoginPage } from '../../src/pages/login.page';
@@ -14,7 +14,7 @@ test.describe('Create, verify and delete article', () => {
   let articlesPage: ArticlesPage;
   let welcomePage: WelcomePage;
   let articlePage: ArticlePage;
-  let articleData: NewArticleDataModel;
+  let articleData: AddArticleModel;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);

@@ -1,4 +1,4 @@
-import { prepareRandomArticleData } from '../src/factories/article.factory copy';
+import { prepareRandomArticleData } from '../src/factories/article.factory';
 import { ArticlePage } from '../src/pages/article.page';
 import { ArticlesPage } from '../src/pages/articles.page';
 import { LoginPage } from '../src/pages/login.page';

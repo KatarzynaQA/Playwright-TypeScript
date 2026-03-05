@@ -1,7 +1,7 @@
-import { NewArticleDataModel } from '../models/article.model';
+import { AddArticleModel } from '../models/article.model';
 import { faker } from '@faker-js/faker';
 
-export function prepareRandomArticleData(titleLength?: number): NewArticleDataModel {
+export function prepareRandomArticleData(titleLength?: number): AddArticleModel {
   let articleTitle: string;
 
   if (titleLength) articleTitle = faker.string.alpha(titleLength);
