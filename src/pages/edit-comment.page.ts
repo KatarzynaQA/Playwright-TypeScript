@@ -1,5 +1,5 @@
-import { AddCommentModel } from '../models/comment.model';
 import { Locator, Page } from '@playwright/test';
+import { AddCommentModel } from '@src/models/comment.model';
 
 export class EditCommentPage {
   commentUpdatedBody: Locator;

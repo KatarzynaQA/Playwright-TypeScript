@@ -1,5 +1,5 @@
-import { AddArticleModel } from '../models/article.model';
 import { Locator, Page } from '@playwright/test';
+import { AddArticleModel } from '@src/models/article.model';
 
 export class AddArticleFormComponent {
   titleInput: Locator;
