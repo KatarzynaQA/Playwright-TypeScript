@@ -1,18 +1,16 @@
 import { prepareRandomArticleData } from '../src/factories/article.factory';
 import { ArticlePage } from '../src/pages/article.page';
 import { ArticlesPage } from '../src/pages/articles.page';
-import { WelcomePage } from '../src/pages/welcome.page';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles page', () => {
   // let loginPage: LoginPage;
   let articlesPage: ArticlesPage;
-  let welcomePage: WelcomePage;
 
   test.beforeEach(async ({ page }) => {
     // loginPage = new LoginPage(page);
     articlesPage = new ArticlesPage(page);
-    welcomePage = new WelcomePage(page);
+    await articlesPage.goto();
 
     // await loginPage.goto();
     // await loginPage.login(userData);
@@ -28,8 +26,6 @@ test.describe('Verify articles page', () => {
     const expectedErrorMessage = 'Article was not created';
     const articleData = prepareRandomArticleData();
     articleData.articleTitle = '';
-
-    await articlesPage.goto();
 
     // Act:
     await articlesPage.addArticleButton.click();
@@ -50,7 +46,7 @@ test.describe('Verify articles page', () => {
 
     // await loginPage.goto();
     // await loginPage.loginUser(userData);
-    await welcomePage.clickArticlesButton();
+    // await articlesPage.goto();
 
     // Act:
     await articlesPage.addArticleButton.click();
@@ -72,7 +68,6 @@ test.describe('Verify articles page', () => {
 
       // await loginPage.goto();
       // await loginPage.loginUser(userData);
-      await welcomePage.clickArticlesButton();
 
       // Act:
       await articlesPage.addArticleButton.click();
@@ -96,7 +91,6 @@ test.describe('Verify articles page', () => {
 
       // await loginPage.goto();
       // await loginPage.loginUser(userData);
-      await welcomePage.clickArticlesButton();
 
       // Act:
       await articlesPage.addArticleButton.click();
