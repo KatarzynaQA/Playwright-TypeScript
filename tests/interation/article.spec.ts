@@ -1,6 +1,6 @@
-import { prepareRandomArticleData } from '../../src/factories/article.factory';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
+import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles page', () => {

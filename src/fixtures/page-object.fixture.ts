@@ -1,8 +1,8 @@
-import { ArticlesPage } from '../../src/pages/articles.page';
-import { CommentsPage } from '../../src/pages/comments.page';
 import { HomePage } from '../pages/home.page';
 import { LoginPage } from '../pages/login.page';
 import { WelcomePage } from '../pages/welcome.page';
+import { ArticlesPage } from '@_src/pages/articles.page';
+import { CommentsPage } from '@_src/pages/comments.page';
 import { test as baseTest } from '@playwright/test';
 
 interface Pages {

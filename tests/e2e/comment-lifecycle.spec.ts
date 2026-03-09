@@ -1,15 +1,15 @@
-import { prepareRandomArticleData } from '../../src/factories/article.factory';
-import { prepareRandomCommentData } from '../../src/factories/comment.factory';
-import { AddArticleModel } from '../../src/models/article.model';
-import { AddCommentModel } from '../../src/models/comment.model';
-import { AddCommentPage } from '../../src/pages/add-comment.page';
-import { ArticlePage } from '../../src/pages/article.page';
-import { ArticlesPage } from '../../src/pages/articles.page';
-import { CommentPage } from '../../src/pages/comment.page';
-import { EditCommentPage } from '../../src/pages/edit-comment.page';
-import { LoginPage } from '../../src/pages/login.page';
-import { WelcomePage } from '../../src/pages/welcome.page';
-import { userData } from '../../src/test-data/user.data';
+import { prepareRandomArticleData } from '@_src/factories/article.factory';
+import { prepareRandomCommentData } from '@_src/factories/comment.factory';
+import { AddArticleModel } from '@_src/models/article.model';
+import { AddCommentModel } from '@_src/models/comment.model';
+import { AddCommentPage } from '@_src/pages/add-comment.page';
+import { ArticlePage } from '@_src/pages/article.page';
+import { ArticlesPage } from '@_src/pages/articles.page';
+import { CommentPage } from '@_src/pages/comment.page';
+import { EditCommentPage } from '@_src/pages/edit-comment.page';
+import { LoginPage } from '@_src/pages/login.page';
+import { WelcomePage } from '@_src/pages/welcome.page';
+import { userData } from '@_src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
 test.describe.configure({ mode: 'serial' });

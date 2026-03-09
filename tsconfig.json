@@ -3,6 +3,11 @@
     "target": "ESNext",
     "module": "CommonJS",
     "sourceMap": true,
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@_src/*": ["src/*"]
+    },
     "types": ["node", "@playwright/test"],
     "strict": true,
     "esModuleInterop": true,
