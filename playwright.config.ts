@@ -1,6 +1,12 @@
 import { BASE_URL } from './src/test-data/env.config';
 import { defineConfig, devices } from '@playwright/test';
+import * as path from 'path';
 
+/**
+ * See https://playwright.dev/docs/test-configuration.
+ */
+
+export const STORAGE_STATE = path.join(__dirname, 'tmp/session.json');
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -36,8 +42,31 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'chromium-non-logged',
+      grepInvert: /@logged/,
       use: { ...devices['Desktop Chrome'] },
+    },
+
+    // {
+    //   name: 'iphone',
+    //   use: { ...devices['iPhone 12 Mini'] },
+    // },
+    // {
+    //   name: 'smoke',
+    //   testDir: './tests/smoke',
+    // },
+    {
+      name: 'setup',
+      testMatch: '*.setup.ts',
+    },
+    {
+      name: 'chromium-logged',
+      grep: /@logged/,
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: STORAGE_STATE,
+      },
     },
 
     // {
