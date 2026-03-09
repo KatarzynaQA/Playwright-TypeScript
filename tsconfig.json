@@ -6,7 +6,8 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@_src/*": ["src/*"]
+      "@_src/*": ["src/*"],
+      "@_pw-config": ["playwright.config.ts"]
     },
     "types": ["node", "@playwright/test"],
     "strict": true,
