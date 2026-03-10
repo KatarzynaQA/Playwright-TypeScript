@@ -1,22 +1,15 @@
 import { prepareRandomUserData } from '@_src/factories/user.factory';
-import { LoginPage } from '@_src/pages/login.page';
-import { RegisterPage } from '@_src/pages/register.page';
-import { WelcomePage } from '@_src/pages/welcome.page';
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@_src/fixtures/merge.fixture';
 
 test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
   test(
     'User can register to the service using required fields',
     { tag: '@GAD-R03-01, @GAD-R03-02, @GAD-R03-03' },
-    async ({ page }) => {
+    async ({ loginPage, welcomePage, registerPage }) => {
       // Arrange:
       const expectPopupText = 'User created';
       const expectedLoginPageTitle = 'Login';
       const expectedWelcomePageTitle = 'Welcome';
-
-      const loginPage = new LoginPage(page);
-      const welcomePage = new WelcomePage(page);
-      const registerPage = new RegisterPage(page);
 
       const registerUserData = prepareRandomUserData();
 
