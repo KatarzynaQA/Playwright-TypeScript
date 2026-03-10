@@ -1,10 +1,10 @@
-import { prepareRandomArticleData } from '../../src/factories/article.factory';
-import { AddArticleModel } from '../../src/models/article.model';
-import { ArticlePage } from '../../src/pages/article.page';
-import { ArticlesPage } from '../../src/pages/articles.page';
-import { LoginPage } from '../../src/pages/login.page';
-import { WelcomePage } from '../../src/pages/welcome.page';
-import { userData } from '../../src/test-data/user.data';
+import { prepareRandomArticleData } from '@_src/factories/article.factory';
+import { AddArticleModel } from '@_src/models/article.model';
+import { ArticlePage } from '@_src/pages/article.page';
+import { ArticlesPage } from '@_src/pages/articles.page';
+import { LoginPage } from '@_src/pages/login.page';
+import { WelcomePage } from '@_src/pages/welcome.page';
+import { userData } from '@_src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
 test.describe.configure({ mode: 'serial' });

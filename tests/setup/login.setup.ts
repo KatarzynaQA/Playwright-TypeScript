@@ -1,8 +1,8 @@
-import { STORAGE_STATE } from '../../playwright.config';
-import { expect, test as setup } from '../../src/fixtures/merge.fixture';
-import { userData } from '../../src/test-data/user.data';
+import { STORAGE_STATE } from '@_pw-config';
+import { expect, test as setup } from '@_src/fixtures/merge.fixture';
+import { userData } from '@_src/test-data/user.data';
 
-setup('User can login with correct credentials', async ({ welcomePage, loginPage, page }) => {
+setup('Login and save session', async ({ welcomePage, loginPage, page }) => {
   // Arrange:
   const expectedPageTitle = 'Welcome';
 

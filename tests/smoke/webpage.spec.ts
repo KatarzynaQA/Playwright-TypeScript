@@ -1,4 +1,4 @@
-import { expect, test } from '../../src/fixtures/merge.fixture';
+import { expect, test } from '@_src/fixtures/merge.fixture';
 
 test.describe('Test', () => {
   test('Home page title contains sentence "GAD"', { tag: '@GAD-R01-01' }, async ({ homePage }) => {

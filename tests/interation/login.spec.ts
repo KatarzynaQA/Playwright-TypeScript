@@ -1,6 +1,6 @@
-import { expect, test } from '../../src/fixtures/merge.fixture';
-import { UserLoginModel } from '../../src/models/userLogin.model';
-import { userData } from '../../src/test-data/user.data';
+import { expect, test } from '@_src/fixtures/merge.fixture';
+import { UserLoginModel } from '@_src/models/userLogin.model';
+import { userData } from '@_src/test-data/user.data';
 
 test.describe('Verify user login to account', () => {
   test(
