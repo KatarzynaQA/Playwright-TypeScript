@@ -3,10 +3,11 @@ import { expect, test } from '@_src/fixtures/merge.fixture';
 test.describe('Test', () => {
   test('Home page title contains sentence "GAD"', { tag: '@GAD-R01-01' }, async ({ homePage }) => {
     //Arrange
+    const expectedHomePageTitle = 'GAD';
     //Act
     //Assert
     const title = await homePage.getTitle();
-    expect(title).toContain('GAD');
+    expect(title).toContain(expectedHomePageTitle);
   });
 
   test(
