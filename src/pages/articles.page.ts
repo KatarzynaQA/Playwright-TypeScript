@@ -9,14 +9,20 @@ export class ArticlesPage extends BasePage {
   addArticleFormComponent = new AddArticleFormComponent(this.page);
   addArticleButton: Locator;
   saveAlertPopup: Locator;
+  goSearchButton: Locator;
 
   constructor(page: Page) {
     super(page);
     this.addArticleButton = this.page.getByRole('button', { name: 'Add Article' });
     this.saveAlertPopup = this.page.getByTestId('alert-popup');
+    this.goSearchButton = this.page.getByTestId('search-button');
   }
 
   async goToArticle(articleTitle: string): Promise<void> {
     await this.page.getByText(articleTitle).click();
+  }
+
+  async clickGoSearchButton(): Promise<void> {
+    await this.goSearchButton.click();
   }
 }
