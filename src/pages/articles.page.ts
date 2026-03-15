@@ -25,4 +25,8 @@ export class ArticlesPage extends BasePage {
   async clickGoSearchButton(): Promise<void> {
     await this.goSearchButton.click();
   }
+
+  async clickAddArticleButton(): Promise<void> {
+    await this.addArticleButton.click();
+  }
 }
