@@ -1,3 +1,4 @@
+import { RESPONSE_TIMEOUT } from '@_pw-config';
 import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { ArticlePage } from '@_src/pages/article.page';
 import { ArticlesPage } from '@_src/pages/articles.page';
@@ -21,20 +22,27 @@ test.describe('Verify articles page', () => {
     // await page.context().storageState(sessionData.localStorage);
   });
 
-  test('Should not add article with empty title', { tag: '@logged' }, async () => {
+  test('Should not add article with empty title', { tag: '@logged' }, async ({ page }) => {
     // Arrange:
     const expectedErrorMessage = 'Article was not created';
+    const expectedAPIErrorMessage = 422;
+
     const articleData = prepareRandomArticleData();
     articleData.articleTitle = '';
 
+    const responsePromise = page.waitForResponse('/api/articles', { timeout: RESPONSE_TIMEOUT });
+
     // Act:
-    await articlesPage.addArticleButton.click();
+    await articlesPage.clickAddArticleButton();
     await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+
+    const response = await responsePromise;
 
     // Assert:
     await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
       expectedErrorMessage,
     );
+    expect(response.status()).toBe(expectedAPIErrorMessage);
   });
 
   test('Should not add article with empty body', { tag: ['@GAD-R04', '@logged'] }, async () => {
