@@ -1,4 +1,3 @@
-import { RESPONSE_TIMEOUT } from '@_pw-config';
 import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { ArticlePage } from '@_src/pages/article.page';
 import { ArticlesPage } from '@_src/pages/articles.page';
@@ -151,13 +150,7 @@ test.describe('Verify articles page', () => {
       const articleData = prepareRandomArticleData();
 
       // Act:
-      const responsePromise = page.waitForResponse(
-        (response) => {
-          // console.log(response.url(), response.request().method(), response.status());
-          return response.url().includes('/api/articles') && response.request().method() === 'GET';
-        },
-        { timeout: RESPONSE_TIMEOUT },
-      );
+      const responsePromise = waitForResponse(page, '/api/articles', 'GET');
 
       await articlesPage.addArticleButton.click();
       await articlesPage.addArticleFormComponent.createNewArticle(articleData);

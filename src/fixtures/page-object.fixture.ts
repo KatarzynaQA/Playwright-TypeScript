@@ -1,3 +1,4 @@
+import { AddCommentPage } from '@_src/pages/add-comment.page';
 import { ArticlesPage } from '@_src/pages/articles.page';
 import { CommentsPage } from '@_src/pages/comments.page';
 import { HomePage } from '@_src/pages/home.page';
@@ -13,6 +14,7 @@ interface Pages {
   loginPage: LoginPage;
   welcomePage: WelcomePage;
   registerPage: RegisterPage;
+  addCommentPage: AddCommentPage;
 }
 
 export const pageObjectTest = baseTest.extend<Pages>({
@@ -50,5 +52,10 @@ export const pageObjectTest = baseTest.extend<Pages>({
     const registerPage = new RegisterPage(page);
     await registerPage.goto();
     await use(registerPage);
+  },
+
+  addCommentPage: async ({ page }, use) => {
+    const addCommentPage = new AddCommentPage(page);
+    await use(addCommentPage);
   },
 });
