@@ -1,7 +1,7 @@
-import { RESPONSE_TIMEOUT } from '@_pw-config';
 import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { ArticlePage } from '@_src/pages/article.page';
 import { ArticlesPage } from '@_src/pages/articles.page';
+import { waitForResponse } from '@_src/utils/wait.util';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles page', () => {
@@ -22,69 +22,89 @@ test.describe('Verify articles page', () => {
     // await page.context().storageState(sessionData.localStorage);
   });
 
-  test('Should not add article with empty title', { tag: '@logged' }, async ({ page }) => {
-    // Arrange:
-    const expectedErrorMessage = 'Article was not created';
-    const expectedAPIErrorMessage = 422;
+  test(
+    'Should not add article with empty title',
+    { tag: ['@GAD-R07-03', '@logged'] },
+    async ({ page }) => {
+      // Arrange:
+      const expectedErrorMessage = 'Article was not created';
+      const expectedAPIErrorMessage = 422;
 
-    const articleData = prepareRandomArticleData();
-    articleData.articleTitle = '';
+      const articleData = prepareRandomArticleData();
+      articleData.articleTitle = '';
 
-    const responsePromise = page.waitForResponse('/api/articles', { timeout: RESPONSE_TIMEOUT });
+      const responsePromise = waitForResponse(page, '/api/articles');
 
-    // Act:
-    await articlesPage.clickAddArticleButton();
-    await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+      // Act:
+      await articlesPage.clickAddArticleButton();
+      await articlesPage.addArticleFormComponent.createNewArticle(articleData);
 
-    const response = await responsePromise;
+      const response = await responsePromise;
 
-    // Assert:
-    await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
-      expectedErrorMessage,
-    );
-    expect(response.status()).toBe(expectedAPIErrorMessage);
-  });
+      // Assert:
+      await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
+        expectedErrorMessage,
+      );
+      expect(response.status()).toBe(expectedAPIErrorMessage);
+    },
+  );
 
-  test('Should not add article with empty body', { tag: ['@GAD-R04', '@logged'] }, async () => {
-    // Arrange:
-    const expectedErrorMessage = 'Article was not created';
+  test(
+    'Should not add article with empty body',
+    { tag: ['@GAD-R04', '@GAD-R07-03', '@logged'] },
+    async ({ page }) => {
+      // Arrange:
+      const expectedErrorMessage = 'Article was not created';
+      const expectedResponseCode = 422;
 
-    const articleData = prepareRandomArticleData();
-    articleData.articleBody = '';
+      const articleData = prepareRandomArticleData();
+      articleData.articleBody = '';
 
-    // await loginPage.goto();
-    // await loginPage.loginUser(userData);
-    // await articlesPage.goto();
+      const responsePromise = waitForResponse(page, '/api/articles');
+      // await loginPage.goto();
+      // await loginPage.loginUser(userData);
+      // await articlesPage.goto();
 
-    // Act:
-    await articlesPage.addArticleButton.click();
-    await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+      // Act:
+      await articlesPage.addArticleButton.click();
+      await articlesPage.addArticleFormComponent.createNewArticle(articleData);
 
-    // Assert:
-    await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
-      expectedErrorMessage,
-    );
-  });
+      const response = await responsePromise;
+
+      // Assert:
+      await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
+        expectedErrorMessage,
+      );
+      expect(response.status()).toBe(expectedResponseCode);
+    },
+  );
 
   test(
     'Article title should not exceed 128 signs',
     { tag: ['@GAD-R04-02', '@logged'] },
-    async () => {
+    async ({ page }) => {
       // Arrange:
       const expectedErrorMessage = 'Article was not created';
+      const expectedResponseCode = 422;
+
       const articleData = prepareRandomArticleData(129);
 
       // await loginPage.goto();
       // await loginPage.loginUser(userData);
 
       // Act:
+      const responsePromise = waitForResponse(page, '/api/articles');
+
       await articlesPage.addArticleButton.click();
       await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+
+      const response = await responsePromise;
 
       // Assert:
       await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
         expectedErrorMessage,
       );
+      expect(response.status()).toBe(expectedResponseCode);
     },
   );
 
@@ -94,6 +114,8 @@ test.describe('Verify articles page', () => {
     async ({ page }) => {
       // Arrange:
       const expectedErrorMessage = 'Article was created';
+      const expectedResponseCode = 201;
+
       const articlePage = new ArticlePage(page);
       const articleData = prepareRandomArticleData(128);
 
@@ -101,8 +123,11 @@ test.describe('Verify articles page', () => {
       // await loginPage.loginUser(userData);
 
       // Act:
+      const responsePromise = waitForResponse(page, '/api/articles');
+
       await articlesPage.addArticleButton.click();
       await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+      const response = await responsePromise;
 
       // Assert:
       await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
@@ -110,6 +135,7 @@ test.describe('Verify articles page', () => {
       );
 
       await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
+      expect(response.status()).toBe(expectedResponseCode);
     },
   );
 });
