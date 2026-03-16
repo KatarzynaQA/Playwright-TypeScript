@@ -1,3 +1,4 @@
+import { RESPONSE_TIMEOUT } from '@_pw-config';
 import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { ArticlePage } from '@_src/pages/article.page';
 import { ArticlesPage } from '@_src/pages/articles.page';
@@ -136,6 +137,39 @@ test.describe('Verify articles page', () => {
 
       await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
       expect(response.status()).toBe(expectedResponseCode);
+    },
+  );
+
+  test(
+    'Should return created article from API',
+    { tag: ['@GAD-R07-04', '@logged'] },
+    async ({ page }) => {
+      // Arrange:
+      const expectedErrorMessage = 'Article was created';
+
+      const articlePage = new ArticlePage(page);
+      const articleData = prepareRandomArticleData();
+
+      // Act:
+      const responsePromise = page.waitForResponse(
+        (response) => {
+          // console.log(response.url(), response.request().method(), response.status());
+          return response.url().includes('/api/articles') && response.request().method() === 'GET';
+        },
+        { timeout: RESPONSE_TIMEOUT },
+      );
+
+      await articlesPage.addArticleButton.click();
+      await articlesPage.addArticleFormComponent.createNewArticle(articleData);
+      const response = await responsePromise;
+
+      // Assert:
+      await expect(articlesPage.addArticleFormComponent.saveAlertPopup).toHaveText(
+        expectedErrorMessage,
+      );
+
+      await expect(articlePage.articleTitle).toHaveText(articleData.articleTitle);
+      expect(response.ok).toBeTruthy();
     },
   );
 });
