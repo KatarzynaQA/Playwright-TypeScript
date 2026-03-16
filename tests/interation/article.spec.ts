@@ -81,7 +81,7 @@ test.describe('Verify articles page', () => {
 
   test(
     'Article title should not exceed 128 signs',
-    { tag: ['@GAD-R04-02', '@logged'] },
+    { tag: ['@GAD-R04-02', '@GAD-R07-03', '@logged'] },
     async ({ page }) => {
       // Arrange:
       const expectedErrorMessage = 'Article was not created';
@@ -110,7 +110,7 @@ test.describe('Verify articles page', () => {
 
   test(
     'Should create article title with 128 signs',
-    { tag: ['@GAD-R04-02', '@logged'] },
+    { tag: ['@GAD-R04-02', '@GAD-R07-03', '@logged'] },
     async ({ page }) => {
       // Arrange:
       const expectedErrorMessage = 'Article was created';
