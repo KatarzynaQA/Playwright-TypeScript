@@ -56,7 +56,9 @@ test.describe('Verify articles API endpoint', () => {
       expect(article).toHaveProperty('id');
 
       expectedRequiredProperties.forEach((property) => {
-        expect(article).toHaveProperty(property);
+        expect(article, `Article object has required property: "${property}"`).toHaveProperty(
+          property,
+        );
       });
     },
   );
