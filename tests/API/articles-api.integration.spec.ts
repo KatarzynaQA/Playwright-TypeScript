@@ -2,7 +2,7 @@ import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { userData } from '@_src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
-test.describe('Verify articles CRUD operations', { tag: '@api' }, () => {
+test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
   test('Should not create article without a logged-in user', async ({ request }) => {
     // Arrange:
     const expectedStatusCode = 401;
@@ -25,7 +25,7 @@ test.describe('Verify articles CRUD operations', { tag: '@api' }, () => {
 
   test(
     'Should create article with a logged-in user',
-    { tag: '@GAD-R09-01, @api' },
+    { tag: '@GAD-R09-01, @crud' },
     async ({ request }) => {
       //Arrange:
       const expectedStatusCode = 201;

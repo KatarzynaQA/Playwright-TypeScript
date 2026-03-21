@@ -3,7 +3,7 @@ import { prepareRandomCommentData } from '@_src/factories/comment.factory';
 import { userData } from '@_src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
-test.describe('Verify comment CRUD operations', { tag: '@api' }, () => {
+test.describe('Verify comment CRUD operations', () => {
   let token: string;
   let headers: { [key: string]: string };
   let articleId: number;
@@ -51,24 +51,28 @@ test.describe('Verify comment CRUD operations', { tag: '@api' }, () => {
     expect(responseArticle.status()).toBe(expectedStatusCode);
   });
 
-  test('Should not create comment without a logged-in user', async ({ request }) => {
-    // Arrange:
-    const expectedStatusCode = 401;
-    const commentsUrl = 'api/comments';
-    const randomCommentData = prepareRandomCommentData();
+  test(
+    'Should not create comment without a logged-in user',
+    { tag: '@crud' },
+    async ({ request }) => {
+      // Arrange:
+      const expectedStatusCode = 401;
+      const commentsUrl = 'api/comments';
+      const randomCommentData = prepareRandomCommentData();
 
-    const commentData = {
-      article_id: 12,
-      body: randomCommentData.commentBody,
-      date: '2024-06-30T15:44:31Z',
-    };
-    // Act:
-    const response = await request.post(commentsUrl, {
-      data: commentData,
-    });
-    // Assert:
-    expect(response.status()).toBe(expectedStatusCode);
-  });
+      const commentData = {
+        article_id: 12,
+        body: randomCommentData.commentBody,
+        date: '2024-06-30T15:44:31Z',
+      };
+      // Act:
+      const response = await request.post(commentsUrl, {
+        data: commentData,
+      });
+      // Assert:
+      expect(response.status()).toBe(expectedStatusCode);
+    },
+  );
 
   test(
     'Should create comment with a logged-in user',

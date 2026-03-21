@@ -43,8 +43,13 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'api',
+      testDir: './tests/API',
+    },
+    {
       name: 'chromium-non-logged',
       grepInvert: /@logged/,
+      testDir: './tests/UI',
       use: { ...devices['Desktop Chrome'] },
     },
 
