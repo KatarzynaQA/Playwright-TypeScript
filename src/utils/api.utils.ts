@@ -3,6 +3,10 @@ import { prepareRandomCommentData } from '@_src/factories/comment.factory';
 import { userData } from '@_src/test-data/user.data';
 import { APIRequestContext } from '@playwright/test';
 
+export const apiLinks = {
+  articlesUrl: 'api/articles',
+  commentsUrl: 'api/comments',
+};
 interface Headers {
   [key: string]: string;
 }

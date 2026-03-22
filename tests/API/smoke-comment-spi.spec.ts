@@ -1,12 +1,7 @@
 import { expect, test } from '@_src/fixtures/merge.fixture';
+import { apiLinks } from '@_src/utils/api.utils';
 
 test.describe('Verify comment API endpoint', () => {
-  let commentsUrl: string;
-
-  test.beforeEach(() => {
-    commentsUrl = 'api/comments';
-  });
-
   test(
     'GET comments returns status code 200',
     { tag: '@GAD-R08-02, @api' },
@@ -15,7 +10,7 @@ test.describe('Verify comment API endpoint', () => {
       const expectedStatusCode = 200;
 
       // Act:
-      const response = await request.get(commentsUrl);
+      const response = await request.get(apiLinks.commentsUrl);
 
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
@@ -30,7 +25,7 @@ test.describe('Verify comment API endpoint', () => {
       const expectedObjectCount = 1;
 
       //Act
-      const response = await request.get(commentsUrl);
+      const response = await request.get(apiLinks.commentsUrl);
       const responseJson = await response.json();
 
       //Assert
@@ -47,7 +42,7 @@ test.describe('Verify comment API endpoint', () => {
 
       // Act:
 
-      const response = await request.get(commentsUrl);
+      const response = await request.get(apiLinks.commentsUrl);
       const responseJSON = await response.json();
       const comment = responseJSON[0];
 

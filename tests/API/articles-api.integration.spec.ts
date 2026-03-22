@@ -1,4 +1,8 @@
-import { loginAndGetAuthorizationToken, prepareArticlePayload } from '@_src/utils/api.utils';
+import {
+  apiLinks,
+  loginAndGetAuthorizationToken,
+  prepareArticlePayload,
+} from '@_src/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
@@ -7,10 +11,9 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
   test('Should not create article without a logged-in user', async ({ request }) => {
     // Arrange:
     const expectedStatusCode = 401;
-    const articlesUrl = 'api/articles';
 
     // Act:
-    const response = await request.post(articlesUrl, {
+    const response = await request.post(apiLinks.articlesUrl, {
       data: articleData,
     });
     // Assert:
@@ -24,10 +27,9 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
       //Arrange:
       const headers = await loginAndGetAuthorizationToken(request);
       const expectedStatusCode = 201;
-      const articlesUrl = 'api/articles';
 
       // Act:
-      const responseArticle = await request.post(articlesUrl, {
+      const responseArticle = await request.post(apiLinks.articlesUrl, {
         headers,
         data: articleData,
       });

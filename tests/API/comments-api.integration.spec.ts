@@ -1,4 +1,5 @@
 import {
+  apiLinks,
   loginAndGetAuthorizationToken,
   prepareArticlePayload,
   prepareCommentPayload,
@@ -13,11 +14,10 @@ test.describe('Verify comment CRUD operations', () => {
     headers = await loginAndGetAuthorizationToken(request);
 
     const expectedStatusCode = 201;
-    const articlesUrl = 'api/articles';
 
     const articleData = prepareArticlePayload();
 
-    const responseArticle = await request.post(articlesUrl, {
+    const responseArticle = await request.post(apiLinks.articlesUrl, {
       headers,
       data: articleData,
     });
@@ -34,12 +34,11 @@ test.describe('Verify comment CRUD operations', () => {
     async ({ request }) => {
       // Arrange:
       const expectedStatusCode = 401;
-      const commentsUrl = 'api/comments';
 
       const commentData = prepareCommentPayload(articleId);
 
       // Act:
-      const response = await request.post(commentsUrl, {
+      const response = await request.post(apiLinks.commentsUrl, {
         data: commentData,
       });
       // Assert:
@@ -53,11 +52,10 @@ test.describe('Verify comment CRUD operations', () => {
     async ({ request }) => {
       //Arrange:
       const expectedStatusCode = 201;
-      const commentsUrl = 'api/comments';
       const commentData = prepareCommentPayload(articleId);
 
       // Act:
-      const responseComment = await request.post(commentsUrl, {
+      const responseComment = await request.post(apiLinks.commentsUrl, {
         headers,
         data: commentData,
       });
