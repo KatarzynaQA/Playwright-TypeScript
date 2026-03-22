@@ -1,6 +1,5 @@
-import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { prepareRandomCommentData } from '@_src/factories/comment.factory';
-import { loginAndGetAuthorizationToken } from '@_src/utils/api.utils';
+import { loginAndGetAuthorizationToken, prepareArticlePayload } from '@_src/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
@@ -13,14 +12,7 @@ test.describe('Verify comment CRUD operations', () => {
     const expectedStatusCode = 201;
     const articlesUrl = 'api/articles';
 
-    const randomArticleData = prepareRandomArticleData(4);
-
-    const articleData = {
-      title: randomArticleData.articleTitle,
-      body: randomArticleData.articleBody,
-      date: '2026-03-20T11:02:51.237Z',
-      image: 'string',
-    };
+    const articleData = prepareArticlePayload();
 
     const responseArticle = await request.post(articlesUrl, {
       headers,
