@@ -1,5 +1,8 @@
-import { prepareRandomCommentData } from '@_src/factories/comment.factory';
-import { loginAndGetAuthorizationToken, prepareArticlePayload } from '@_src/utils/api.utils';
+import {
+  loginAndGetAuthorizationToken,
+  prepareArticlePayload,
+  prepareCommentPayload,
+} from '@_src/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
@@ -32,13 +35,9 @@ test.describe('Verify comment CRUD operations', () => {
       // Arrange:
       const expectedStatusCode = 401;
       const commentsUrl = 'api/comments';
-      const randomCommentData = prepareRandomCommentData();
 
-      const commentData = {
-        article_id: 12,
-        body: randomCommentData.commentBody,
-        date: '2024-06-30T15:44:31Z',
-      };
+      const commentData = prepareCommentPayload(articleId);
+
       // Act:
       const response = await request.post(commentsUrl, {
         data: commentData,
@@ -55,14 +54,7 @@ test.describe('Verify comment CRUD operations', () => {
       //Arrange:
       const expectedStatusCode = 201;
       const commentsUrl = 'api/comments';
-
-      const randomCommentData = prepareRandomCommentData();
-
-      const commentData = {
-        article_id: articleId,
-        body: randomCommentData.commentBody,
-        date: '2024-06-30T15:44:31Z',
-      };
+      const commentData = prepareCommentPayload(articleId);
 
       // Act:
       const responseComment = await request.post(commentsUrl, {

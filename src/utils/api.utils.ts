@@ -1,4 +1,5 @@
 import { prepareRandomArticleData } from '@_src/factories/article.factory';
+import { prepareRandomCommentData } from '@_src/factories/comment.factory';
 import { userData } from '@_src/test-data/user.data';
 import { APIRequestContext } from '@playwright/test';
 
@@ -43,4 +44,21 @@ export function prepareArticlePayload(): ArticleData {
   };
 
   return articleData;
+}
+
+interface CommentData {
+  article_id: number;
+  body: string;
+  date: string;
+}
+
+export function prepareCommentPayload(articleId: number): CommentData {
+  const randomCommentData = prepareRandomCommentData();
+
+  const commentData = {
+    article_id: articleId,
+    body: randomCommentData.commentBody,
+    date: '2024-06-30T15:44:31Z',
+  };
+  return commentData;
 }
