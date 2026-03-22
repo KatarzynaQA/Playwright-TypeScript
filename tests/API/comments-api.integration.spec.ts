@@ -1,21 +1,17 @@
 import { prepareRandomArticleData } from '@_src/factories/article.factory';
 import { prepareRandomCommentData } from '@_src/factories/comment.factory';
-import { userData } from '@_src/test-data/user.data';
+import { loginAndGetAuthorizationToken } from '@_src/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
-  let token: string;
   let headers: { [key: string]: string };
   let articleId: number;
 
   test.beforeAll('Create an article', async ({ request }) => {
+    headers = await loginAndGetAuthorizationToken(request);
+
     const expectedStatusCode = 201;
     const articlesUrl = 'api/articles';
-
-    const userLoginData = {
-      email: userData.userName,
-      password: userData.userPassword,
-    };
 
     const randomArticleData = prepareRandomArticleData(4);
 
@@ -24,20 +20,6 @@ test.describe('Verify comment CRUD operations', () => {
       body: randomArticleData.articleBody,
       date: '2026-03-20T11:02:51.237Z',
       image: 'string',
-    };
-
-    //Login
-    const loginUrl = 'api/login';
-    const responseLogin = await request.post(loginUrl, { data: userLoginData });
-
-    // Validate login response
-    expect(responseLogin.status()).toBe(200);
-    const responseJson = await responseLogin.json();
-    token = responseJson.access_token;
-    expect(token).toBeDefined();
-
-    headers = {
-      Authorization: `Bearer ${responseJson.access_token}`,
     };
 
     const responseArticle = await request.post(articlesUrl, {

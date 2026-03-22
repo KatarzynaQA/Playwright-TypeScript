@@ -1,5 +1,5 @@
 import { prepareRandomArticleData } from '@_src/factories/article.factory';
-import { userData } from '@_src/test-data/user.data';
+import { loginAndGetAuthorizationToken } from '@_src/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
@@ -28,13 +28,14 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
     { tag: '@GAD-R09-01, @crud' },
     async ({ request }) => {
       //Arrange:
+      const headers = await loginAndGetAuthorizationToken(request);
       const expectedStatusCode = 201;
       const articlesUrl = 'api/articles';
 
-      const userLoginData = {
-        email: userData.userName,
-        password: userData.userPassword,
-      };
+      // const userLoginData = {
+      //   email: userData.userName,
+      //   password: userData.userPassword,
+      // };
 
       const randomArticleData = prepareRandomArticleData(4);
 
@@ -45,21 +46,9 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
         image: 'string',
       };
 
-      //Login
-      const loginUrl = 'api/login';
-      const responseLogin = await request.post(loginUrl, { data: userLoginData });
-
-      // Validate login response
-      expect(responseLogin.status()).toBe(200);
-      const responseJson = await responseLogin.json();
-      const token = responseJson.access_token;
-      expect(token).toBeDefined();
-
       // Act:
       const responseArticle = await request.post(articlesUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers,
         data: articleData,
       });
 
