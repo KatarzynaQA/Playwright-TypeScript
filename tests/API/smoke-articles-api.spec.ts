@@ -1,21 +1,16 @@
 import { expect, test } from '@_src/fixtures/merge.fixture';
+import { apiLinks } from '@_src/utils/api.utils';
 
 test.describe('Verify articles API endpoint', () => {
-  let articlesUrl: string;
-
-  test.beforeEach(() => {
-    articlesUrl = 'api/articles';
-  });
-
   test(
     'GET articles returns status code 200',
-    { tag: '@GAD-R08-01, @api' },
+    { tag: '@GAD-R08-01, @smoke' },
     async ({ request }) => {
       // Arrange:
       const expectedStatusCode = 200;
 
       // Act:
-      const response = await request.get(articlesUrl);
+      const response = await request.get(apiLinks.articlesUrl);
 
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
@@ -24,14 +19,14 @@ test.describe('Verify articles API endpoint', () => {
 
   test(
     'GET articles should returns at least one article',
-    { tag: '@GAD-R08-01, @api, @predefine_data' },
+    { tag: '@GAD-R08-01, @smoke, @predefine_data' },
     async ({ request }) => {
       // Arrange:
       const expectedArticleCount = 1;
 
       // Act:
 
-      const response = await request.get(articlesUrl);
+      const response = await request.get(apiLinks.articlesUrl);
       const responseJSON = await response.json();
 
       // Assert:
@@ -41,14 +36,14 @@ test.describe('Verify articles API endpoint', () => {
 
   test(
     'GET articles returns article object',
-    { tag: '@GAD-R08-01, @api, @predefine_data' },
+    { tag: '@GAD-R08-01, @smoke, @predefine_data' },
     async ({ request }) => {
       // Arrange:
       const expectedRequiredProperties = ['id', 'user_id', 'title', 'body', 'date', 'image'];
 
       // Act:
 
-      const response = await request.get(articlesUrl);
+      const response = await request.get(apiLinks.articlesUrl);
       const responseJSON = await response.json();
       const article = responseJSON[0];
 

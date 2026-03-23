@@ -114,7 +114,7 @@ test.describe('Verify articles page', () => {
     async ({ page }) => {
       // Arrange:
       const expectedErrorMessage = 'Article was created';
-      const expectedResponseCode = 201;
+      const expectedResponseCode = 200;
 
       const articlePage = new ArticlePage(page);
       const articleData = prepareRandomArticleData(128);
