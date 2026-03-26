@@ -1,9 +1,11 @@
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
+import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
+  let headers: Headers;
   const articleData = prepareArticlePayload();
 
   test('Should not create article without a logged-in user', async ({ request }) => {
@@ -23,7 +25,7 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
     { tag: '@GAD-R09-01, @crud' },
     async ({ request }) => {
       //Arrange:
-      const headers = await loginAndGetAuthorizationToken(request);
+      headers = await loginAndGetAuthorizationToken(request);
       const expectedStatusCode = 201;
 
       // Act:

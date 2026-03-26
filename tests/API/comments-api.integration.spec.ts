@@ -1,11 +1,12 @@
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
+import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
-  let headers: { [key: string]: string };
+  let headers: Headers;
   let articleId: number;
 
   test.beforeAll('Create an article', async ({ request }) => {
