@@ -1,6 +1,6 @@
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
-import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token';
-import { apiLinks } from '@_src/api/utils/api.utils';
+import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
+import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
@@ -11,7 +11,7 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
     const expectedStatusCode = 401;
 
     // Act:
-    const response = await request.post(apiLinks.articlesUrl, {
+    const response = await request.post(apiUrl.articlesUrl, {
       data: articleData,
     });
     // Assert:
@@ -27,7 +27,7 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
       const expectedStatusCode = 201;
 
       // Act:
-      const responseArticle = await request.post(apiLinks.articlesUrl, {
+      const responseArticle = await request.post(apiUrl.articlesUrl, {
         headers,
         data: articleData,
       });

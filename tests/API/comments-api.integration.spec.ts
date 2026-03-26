@@ -1,7 +1,7 @@
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
-import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token';
-import { apiLinks } from '@_src/api/utils/api.utils';
+import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
+import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
@@ -15,7 +15,7 @@ test.describe('Verify comment CRUD operations', () => {
 
     const articleData = prepareArticlePayload();
 
-    const responseArticle = await request.post(apiLinks.articlesUrl, {
+    const responseArticle = await request.post(apiUrl.articlesUrl, {
       headers,
       data: articleData,
     });
@@ -36,7 +36,7 @@ test.describe('Verify comment CRUD operations', () => {
       const commentData = prepareCommentPayload(articleId);
 
       // Act:
-      const response = await request.post(apiLinks.commentsUrl, {
+      const response = await request.post(apiUrl.commentsUrl, {
         data: commentData,
       });
       // Assert:
@@ -53,7 +53,7 @@ test.describe('Verify comment CRUD operations', () => {
       const commentData = prepareCommentPayload(articleId);
 
       // Act:
-      const responseComment = await request.post(apiLinks.commentsUrl, {
+      const responseComment = await request.post(apiUrl.commentsUrl, {
         headers,
         data: commentData,
       });

@@ -1,4 +1,4 @@
-import { apiLinks } from '@_src/api/utils/api.utils';
+import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@_src/ui/fixtures/merge.fixture';
 
 test.describe('Verify articles API endpoint', () => {
@@ -10,7 +10,7 @@ test.describe('Verify articles API endpoint', () => {
       const expectedStatusCode = 200;
 
       // Act:
-      const response = await request.get(apiLinks.articlesUrl);
+      const response = await request.get(apiUrl.articlesUrl);
 
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
@@ -26,7 +26,7 @@ test.describe('Verify articles API endpoint', () => {
 
       // Act:
 
-      const response = await request.get(apiLinks.articlesUrl);
+      const response = await request.get(apiUrl.articlesUrl);
       const responseJSON = await response.json();
 
       // Assert:
@@ -43,7 +43,7 @@ test.describe('Verify articles API endpoint', () => {
 
       // Act:
 
-      const response = await request.get(apiLinks.articlesUrl);
+      const response = await request.get(apiUrl.articlesUrl);
       const responseJSON = await response.json();
       const article = responseJSON[0];
 

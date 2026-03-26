@@ -1,4 +1,4 @@
-import { ArticleData } from '../utils/api.utils';
+import { ArticleData } from '../models/article.api.models';
 import { prepareRandomArticleData } from '@_src/ui/factories/article.factory';
 
 export function prepareArticlePayload(): ArticleData {
