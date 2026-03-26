@@ -1,4 +1,3 @@
-import { prepareRandomCommentData } from '@_src/ui/factories/comment.factory';
 import { userData } from '@_src/ui/test-data/user.data';
 import { APIRequestContext } from '@playwright/test';
 
@@ -36,19 +35,8 @@ export interface ArticleData {
   date: string;
   image: string;
 }
-interface CommentData {
+export interface CommentData {
   article_id: number;
   body: string;
   date: string;
-}
-
-export function prepareCommentPayload(articleId: number): CommentData {
-  const randomCommentData = prepareRandomCommentData();
-
-  const commentData = {
-    article_id: articleId,
-    body: randomCommentData.commentBody,
-    date: '2024-06-30T15:44:31Z',
-  };
-  return commentData;
 }
