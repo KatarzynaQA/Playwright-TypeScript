@@ -1,10 +1,10 @@
-import { prepareRandomArticleData } from '@_src/factories/article.factory';
-import { prepareRandomCommentData } from '@_src/factories/comment.factory';
-import { expect, test } from '@_src/fixtures/merge.fixture';
-import { AddArticleModel } from '@_src/models/article.model';
-import { ArticlePage } from '@_src/pages/article.page';
-import { ArticlesPage } from '@_src/pages/articles.page';
-import { waitForResponse } from '@_src/utils/wait.util';
+import { prepareRandomArticleData } from '@_src/ui/factories/article.factory';
+import { prepareRandomCommentData } from '@_src/ui/factories/comment.factory';
+import { expect, test } from '@_src/ui/fixtures/merge.fixture';
+import { AddArticleModel } from '@_src/ui/models/article.model';
+import { ArticlePage } from '@_src/ui/pages/article.page';
+import { ArticlesPage } from '@_src/ui/pages/articles.page';
+import { waitForResponse } from '@_src/ui/utils/wait.util';
 
 test.describe('verify comment creation', () => {
   let articlesPage: ArticlesPage;

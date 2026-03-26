@@ -1,7 +1,7 @@
 import { BasePage } from './base.page';
-import { RegisterPageComponent } from '@_src/components/registerPage.component';
+import { RegisterPageComponent } from '@_src/ui/components/registerPage.component';
+import { RegisterUserModel } from '@_src/ui/models/user.model';
 import { Page } from '@playwright/test';
-import { RegisterUserModel } from '@src/models/user.model';
 
 export class RegisterPage extends BasePage {
   url = '/register.html';

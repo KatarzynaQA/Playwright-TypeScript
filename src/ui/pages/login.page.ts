@@ -1,7 +1,7 @@
 import { BasePage } from './base.page';
-import { LoginFormComponent } from '@_src/components/login-form.component';
+import { LoginFormComponent } from '@_src/ui/components/login-form.component';
+import { UserLoginModel } from '@_src/ui/models/userLogin.model';
 import { Locator, Page } from '@playwright/test';
-import { UserLoginModel } from '@src/models/userLogin.model';
 
 export class LoginPage extends BasePage {
   url = '/login/';

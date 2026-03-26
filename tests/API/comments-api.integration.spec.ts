@@ -3,7 +3,7 @@ import {
   loginAndGetAuthorizationToken,
   prepareArticlePayload,
   prepareCommentPayload,
-} from '@_src/utils/api.utils';
+} from '@_src/ui/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {

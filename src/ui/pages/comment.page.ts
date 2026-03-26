@@ -1,5 +1,5 @@
 import { BasePage } from './base.page';
-import { MainMenuComponent } from '@_src/components/main-menu.component';
+import { MainMenuComponent } from '@_src/ui/components/main-menu.component';
 import { Locator, Page } from '@playwright/test';
 
 export class CommentPage extends BasePage {
