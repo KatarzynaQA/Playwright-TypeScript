@@ -1,5 +1,5 @@
-import { expect, test } from '@_src/fixtures/merge.fixture';
-import { apiLinks } from '@_src/utils/api.utils';
+import { apiUrl } from '@_src/api/utils/api.utils';
+import { expect, test } from '@_src/ui/fixtures/merge.fixture';
 
 test.describe('Verify comment API endpoint', () => {
   test(
@@ -10,7 +10,7 @@ test.describe('Verify comment API endpoint', () => {
       const expectedStatusCode = 200;
 
       // Act:
-      const response = await request.get(apiLinks.commentsUrl);
+      const response = await request.get(apiUrl.commentsUrl);
 
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
@@ -25,7 +25,7 @@ test.describe('Verify comment API endpoint', () => {
       const expectedObjectCount = 1;
 
       //Act
-      const response = await request.get(apiLinks.commentsUrl);
+      const response = await request.get(apiUrl.commentsUrl);
       const responseJson = await response.json();
 
       //Assert
@@ -42,7 +42,7 @@ test.describe('Verify comment API endpoint', () => {
 
       // Act:
 
-      const response = await request.get(apiLinks.commentsUrl);
+      const response = await request.get(apiUrl.commentsUrl);
       const responseJSON = await response.json();
       const comment = responseJSON[0];
 

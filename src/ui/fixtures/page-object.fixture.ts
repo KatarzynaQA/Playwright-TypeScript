@@ -1,10 +1,10 @@
-import { AddCommentPage } from '@_src/pages/add-comment.page';
-import { ArticlesPage } from '@_src/pages/articles.page';
-import { CommentsPage } from '@_src/pages/comments.page';
-import { HomePage } from '@_src/pages/home.page';
-import { LoginPage } from '@_src/pages/login.page';
-import { RegisterPage } from '@_src/pages/register.page';
-import { WelcomePage } from '@_src/pages/welcome.page';
+import { AddCommentPage } from '@_src/ui/pages/add-comment.page';
+import { ArticlesPage } from '@_src/ui/pages/articles.page';
+import { CommentsPage } from '@_src/ui/pages/comments.page';
+import { HomePage } from '@_src/ui/pages/home.page';
+import { LoginPage } from '@_src/ui/pages/login.page';
+import { RegisterPage } from '@_src/ui/pages/register.page';
+import { WelcomePage } from '@_src/ui/pages/welcome.page';
 import { test as baseTest } from '@playwright/test';
 
 interface Pages {

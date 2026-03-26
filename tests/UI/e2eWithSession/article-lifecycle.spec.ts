@@ -1,7 +1,7 @@
-import { prepareRandomArticleData } from '@_src/factories/article.factory';
-import { AddArticleModel } from '@_src/models/article.model';
-import { ArticlePage } from '@_src/pages/article.page';
-import { ArticlesPage } from '@_src/pages/articles.page';
+import { prepareRandomArticleData } from '@_src/ui/factories/article.factory';
+import { AddArticleModel } from '@_src/ui/models/article.model';
+import { ArticlePage } from '@_src/ui/pages/article.page';
+import { ArticlesPage } from '@_src/ui/pages/articles.page';
 import { expect, test } from '@playwright/test';
 
 test.describe.configure({ mode: 'serial' });

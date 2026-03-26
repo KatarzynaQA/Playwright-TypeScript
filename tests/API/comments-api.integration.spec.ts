@@ -1,15 +1,12 @@
-import { expect, test } from '@_src/fixtures/merge.fixture';
-import {
-  CommentDataPayload,
-  Headers,
-  apiLinks,
-  loginAndGetAuthorizationToken,
-  prepareArticlePayload,
-  prepareCommentPayload,
-} from '@_src/utils/api.utils';
-import { APIResponse } from '@playwright/test';
+import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
+import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
+import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
+import { Headers } from '@_src/api/models/headers.api.model';
+import { apiUrl } from '@_src/api/utils/api.utils';
+import { CommentDataPayload } from '@_src/utils/api.utils';
+import { APIResponse, expect, test } from '@playwright/test';
 
-test.describe('Verify comments CRUD operations @crud', () => {
+test.describe('Verify comment CRUD operations', () => {
   let articleId: number;
   let headers: Headers;
 
@@ -17,7 +14,7 @@ test.describe('Verify comments CRUD operations @crud', () => {
     headers = await loginAndGetAuthorizationToken(request);
     const articleData = prepareArticlePayload();
 
-    const responseArticle = await request.post(apiLinks.articlesUrl, {
+    const responseArticle = await request.post(apiUrl.articlesUrl, {
       headers,
       data: articleData,
     });
@@ -31,12 +28,11 @@ test.describe('Verify comments CRUD operations @crud', () => {
     const expectedStatusCode = 401;
     const commentData = prepareCommentPayload(articleId);
 
-    // Act
-    const response = await request.post(apiLinks.commentsUrl, {
+    // Act:
+    const response = await request.post(apiUrl.commentsUrl, {
       data: commentData,
     });
-
-    // Assert
+    // Assert:
     expect(response.status()).toBe(expectedStatusCode);
   });
 
@@ -46,7 +42,7 @@ test.describe('Verify comments CRUD operations @crud', () => {
 
     test.beforeEach('create a comment', async ({ request }) => {
       commentData = prepareCommentPayload(articleId);
-      responseComment = await request.post(apiLinks.commentsUrl, {
+      responseComment = await request.post(apiUrl.commentsUrl, {
         headers,
         data: commentData,
       });
@@ -76,7 +72,7 @@ test.describe('Verify comments CRUD operations @crud', () => {
       const comment = await responseComment.json();
 
       // Act
-      const responseCommentDeleted = await request.delete(`${apiLinks.commentsUrl}/${comment.id}`, {
+      const responseCommentDeleted = await request.delete(`${apiUrl.commentsUrl}/${comment.id}`, {
         headers,
       });
 
@@ -90,7 +86,7 @@ test.describe('Verify comments CRUD operations @crud', () => {
       // Assert deleted comment
       const expectedStatusDeletedComment = 404;
 
-      const responseCommentDeletedGet = await request.get(`${apiLinks.commentsUrl}/${comment.id}`, {
+      const responseCommentDeletedGet = await request.get(`${apiUrl.commentsUrl}/${comment.id}`, {
         headers,
       });
 
@@ -108,9 +104,7 @@ test.describe('Verify comments CRUD operations @crud', () => {
       const comment = await responseComment.json();
 
       // Act
-      const responseCommentNotDeleted = await request.delete(
-        `${apiLinks.commentsUrl}/${comment.id}`,
-      );
+      const responseCommentNotDeleted = await request.delete(`${apiUrl.commentsUrl}/${comment.id}`);
 
       // Assert
       const actualResponseStatus = responseCommentNotDeleted.status();
@@ -122,9 +116,7 @@ test.describe('Verify comments CRUD operations @crud', () => {
       // Assert non deleted comment
       const expectedStatusNotDeletedComment = 200;
 
-      const responseCommentNotDeletedGet = await request.get(
-        `${apiLinks.commentsUrl}/${comment.id}`,
-      );
+      const responseCommentNotDeletedGet = await request.get(`${apiUrl.commentsUrl}/${comment.id}`);
 
       expect(
         responseCommentNotDeletedGet.status(),
