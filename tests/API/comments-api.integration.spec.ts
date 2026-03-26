@@ -1,9 +1,9 @@
-import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
+import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
+import { CommentPayload } from '@_src/api/models/comment.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { CommentDataPayload } from '@_src/utils/api.utils';
 import { APIResponse, expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
@@ -12,12 +12,7 @@ test.describe('Verify comment CRUD operations', () => {
 
   test.beforeAll('create an article', async ({ request }) => {
     headers = await loginAndGetAuthorizationToken(request);
-    const articleData = prepareArticlePayload();
-
-    const responseArticle = await request.post(apiUrl.articlesUrl, {
-      headers,
-      data: articleData,
-    });
+    const responseArticle = await createArticleWithApi(request, headers);
 
     const article = await responseArticle.json();
     articleId = article.id;
@@ -38,7 +33,7 @@ test.describe('Verify comment CRUD operations', () => {
 
   test.describe('crud operations', () => {
     let responseComment: APIResponse;
-    let commentData: CommentDataPayload;
+    let commentData: CommentPayload;
 
     test.beforeEach('create a comment', async ({ request }) => {
       commentData = prepareCommentPayload(articleId);
