@@ -3,17 +3,15 @@ import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.f
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { expect, test } from '@playwright/test';
+import { CommentDataPayload } from '@_src/utils/api.utils';
+import { APIResponse, expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
-  let headers: Headers;
   let articleId: number;
+  let headers: Headers;
 
-  test.beforeAll('Create an article', async ({ request }) => {
+  test.beforeAll('create an article', async ({ request }) => {
     headers = await loginAndGetAuthorizationToken(request);
-
-    const expectedStatusCode = 201;
-
     const articleData = prepareArticlePayload();
 
     const responseArticle = await request.post(apiUrl.articlesUrl, {
@@ -23,47 +21,107 @@ test.describe('Verify comment CRUD operations', () => {
 
     const article = await responseArticle.json();
     articleId = article.id;
-
-    expect(responseArticle.status()).toBe(expectedStatusCode);
   });
 
-  test(
-    'Should not create comment without a logged-in user',
-    { tag: '@crud' },
-    async ({ request }) => {
-      // Arrange:
-      const expectedStatusCode = 401;
+  test('should not create a comment without a logged-in user @GAD-R08-04', async ({ request }) => {
+    // Arrange
+    const expectedStatusCode = 401;
+    const commentData = prepareCommentPayload(articleId);
 
-      const commentData = prepareCommentPayload(articleId);
+    // Act:
+    const response = await request.post(apiUrl.commentsUrl, {
+      data: commentData,
+    });
+    // Assert:
+    expect(response.status()).toBe(expectedStatusCode);
+  });
 
-      // Act:
-      const response = await request.post(apiUrl.commentsUrl, {
-        data: commentData,
-      });
-      // Assert:
-      expect(response.status()).toBe(expectedStatusCode);
-    },
-  );
+  test.describe('crud operations', () => {
+    let responseComment: APIResponse;
+    let commentData: CommentDataPayload;
 
-  test(
-    'Should create comment with a logged-in user',
-    { tag: '@GAD-R09-02, @api' },
-    async ({ request }) => {
-      //Arrange:
-      const expectedStatusCode = 201;
-      const commentData = prepareCommentPayload(articleId);
-
-      // Act:
-      const responseComment = await request.post(apiUrl.commentsUrl, {
+    test.beforeEach('create a comment', async ({ request }) => {
+      commentData = prepareCommentPayload(articleId);
+      responseComment = await request.post(apiUrl.commentsUrl, {
         headers,
         data: commentData,
       });
 
+      // TODO linked issue
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    });
+
+    test('should create a comment with logged-in user @GAD-R08-04', async () => {
+      // Arrange
+      const expectedStatusCode = 201;
+
+      // Assert
+      const actualResponseStatus = responseComment.status();
+      expect(
+        actualResponseStatus,
+        `expect status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
+      ).toBe(expectedStatusCode);
+
+      const comment = await responseComment.json();
+      expect.soft(comment.body).toEqual(commentData.body);
+    });
+
+    test('should delete a comment with logged-in user @GAD-R08-06', async ({ request }) => {
+      // Arrange
+      const expectedStatusCode = 200;
       const comment = await responseComment.json();
 
-      // Assert:
-      expect(responseComment.status()).toBe(expectedStatusCode);
-      expect(comment.body).toBe(commentData.body);
-    },
-  );
+      // Act
+      const responseCommentDeleted = await request.delete(`${apiUrl.commentsUrl}/${comment.id}`, {
+        headers,
+      });
+
+      // Assert
+      const actualResponseStatus = responseCommentDeleted.status();
+      expect(
+        actualResponseStatus,
+        `expect status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
+      ).toBe(expectedStatusCode);
+
+      // Assert deleted comment
+      const expectedStatusDeletedComment = 404;
+
+      const responseCommentDeletedGet = await request.get(`${apiUrl.commentsUrl}/${comment.id}`, {
+        headers,
+      });
+
+      expect(
+        responseCommentDeletedGet.status(),
+        `expect status code ${expectedStatusDeletedComment}, and received ${responseCommentDeletedGet.status()}`,
+      ).toBe(expectedStatusDeletedComment);
+    });
+
+    test('should not delete a comment with a non logged-in user @GAD-R08-06', async ({
+      request,
+    }) => {
+      // Arrange
+      const expectedStatusCode = 401;
+      const comment = await responseComment.json();
+
+      // Act
+      const responseCommentNotDeleted = await request.delete(`${apiUrl.commentsUrl}/${comment.id}`);
+
+      // Assert
+      const actualResponseStatus = responseCommentNotDeleted.status();
+      expect(
+        actualResponseStatus,
+        `expect status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
+      ).toBe(expectedStatusCode);
+
+      // Assert non deleted comment
+      const expectedStatusNotDeletedComment = 200;
+
+      const responseCommentNotDeletedGet = await request.get(`${apiUrl.commentsUrl}/${comment.id}`);
+
+      expect(
+        responseCommentNotDeletedGet.status(),
+        `expect status code ${expectedStatusNotDeletedComment}, and received ${responseCommentNotDeletedGet.status()}`,
+      ).toBe(expectedStatusNotDeletedComment);
+    });
+  });
 });

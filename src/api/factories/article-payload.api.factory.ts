@@ -1,7 +1,7 @@
-import { ArticleData } from '../models/article.api.models';
+import { ArticlePayload } from '../models/article.api.models';
 import { prepareRandomArticleData } from '@_src/ui/factories/article.factory';
 
-export function prepareArticlePayload(): ArticleData {
+export function prepareArticlePayload(): ArticlePayload {
   const randomArticleData = prepareRandomArticleData();
 
   const articleData = {

@@ -1,7 +1,7 @@
-import { CommentData } from '../models/comment.api.models';
+import { CommentPayload } from '../models/comment.api.models';
 import { prepareRandomCommentData } from '@_src/ui/factories/comment.factory';
 
-export function prepareCommentPayload(articleId: number): CommentData {
+export function prepareCommentPayload(articleId: number): CommentPayload {
   const randomCommentData = prepareRandomCommentData();
 
   const commentData = {
