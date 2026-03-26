@@ -1,3 +1,4 @@
+import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
 import { ArticlePayload } from '@_src/api/models/article.api.models';
@@ -31,10 +32,7 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
 
     test.beforeEach('create an article', async ({ request }) => {
       articleData = prepareArticlePayload();
-      responseArticle = await request.post(apiUrl.articlesUrl, {
-        headers,
-        data: articleData,
-      });
+      responseArticle = await createArticleWithApi(request, headers, articleData);
     });
 
     test('should create an article with logged-in user @GAD-R08-03', async () => {
