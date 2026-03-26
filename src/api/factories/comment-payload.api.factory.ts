@@ -1,4 +1,4 @@
-import { CommentPayload } from '../models/comment.api.models';
+import { CommentPayload } from '@_src/api/models/comment-payload.api.models';
 import { prepareRandomCommentData } from '@_src/ui/factories/comment.factory';
 
 export function prepareCommentPayload(articleId: number): CommentPayload {

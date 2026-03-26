@@ -1,7 +1,7 @@
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
-import { ArticlePayload } from '@_src/api/models/article.api.models';
+import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { APIResponse, expect, test } from '@playwright/test';
