@@ -1,6 +1,7 @@
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
-import { apiLinks, loginAndGetAuthorizationToken } from '@_src/api/utils/api.utils';
+import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token';
+import { apiLinks } from '@_src/api/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify comment CRUD operations', () => {
