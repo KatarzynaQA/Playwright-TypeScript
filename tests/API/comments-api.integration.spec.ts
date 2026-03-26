@@ -1,7 +1,8 @@
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
+import { createCommentWithApi } from '@_src/api/factories/comment-create.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
-import { CommentPayload } from '@_src/api/models/comment.api.models';
+import { CommentPayload } from '@_src/api/models/comment-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { APIResponse, expect, test } from '@playwright/test';
@@ -37,10 +38,7 @@ test.describe('Verify comment CRUD operations', () => {
 
     test.beforeEach('create a comment', async ({ request }) => {
       commentData = prepareCommentPayload(articleId);
-      responseComment = await request.post(apiUrl.commentsUrl, {
-        headers,
-        data: commentData,
-      });
+      responseComment = await createCommentWithApi(request, headers, articleId, commentData);
 
       // TODO linked issue
       await new Promise((resolve) => setTimeout(resolve, 5000));

@@ -1,5 +1,5 @@
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
-import { ArticlePayload } from '@_src/api/models/article.api.models';
+import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect } from '@_src/ui/fixtures/merge.fixture';
