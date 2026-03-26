@@ -1,4 +1,3 @@
-import { prepareRandomArticleData } from '@_src/ui/factories/article.factory';
 import { prepareRandomCommentData } from '@_src/ui/factories/comment.factory';
 import { userData } from '@_src/ui/test-data/user.data';
 import { APIRequestContext } from '@playwright/test';
@@ -31,25 +30,12 @@ export async function loginAndGetAuthorizationToken(request: APIRequestContext):
   };
 }
 
-interface ArticleData {
+export interface ArticleData {
   title: string;
   body: string;
   date: string;
   image: string;
 }
-export function prepareArticlePayload(): ArticleData {
-  const randomArticleData = prepareRandomArticleData();
-
-  const articleData = {
-    title: randomArticleData.articleTitle,
-    body: randomArticleData.articleBody,
-    date: '2026-03-20T11:02:51.237Z',
-    image: 'string',
-  };
-
-  return articleData;
-}
-
 interface CommentData {
   article_id: number;
   body: string;

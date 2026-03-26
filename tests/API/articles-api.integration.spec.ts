@@ -1,8 +1,5 @@
-import {
-  apiLinks,
-  loginAndGetAuthorizationToken,
-  prepareArticlePayload,
-} from '@_src/api/utils/api.utils';
+import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
+import { apiLinks, loginAndGetAuthorizationToken } from '@_src/api/utils/api.utils';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
