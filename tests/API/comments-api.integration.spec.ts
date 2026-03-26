@@ -1,3 +1,4 @@
+import { expectGetResponseStatus } from '@_src/api/assertions/assertions.api';
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { createCommentWithApi } from '@_src/api/factories/comment-create.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
@@ -78,15 +79,11 @@ test.describe('Verify comment CRUD operations', () => {
 
       // Assert deleted comment
       const expectedStatusDeletedComment = 404;
-
-      const responseCommentDeletedGet = await request.get(`${apiUrl.commentsUrl}/${comment.id}`, {
-        headers,
-      });
-
-      expect(
-        responseCommentDeletedGet.status(),
-        `expect status code ${expectedStatusDeletedComment}, and received ${responseCommentDeletedGet.status()}`,
-      ).toBe(expectedStatusDeletedComment);
+      await expectGetResponseStatus(
+        request,
+        `${apiUrl.commentsUrl}/${comment.id}`,
+        expectedStatusDeletedComment,
+      );
     });
 
     test('should not delete a comment with a non logged-in user @GAD-R08-06', async ({
@@ -108,13 +105,11 @@ test.describe('Verify comment CRUD operations', () => {
 
       // Assert non deleted comment
       const expectedStatusNotDeletedComment = 200;
-
-      const responseCommentNotDeletedGet = await request.get(`${apiUrl.commentsUrl}/${comment.id}`);
-
-      expect(
-        responseCommentNotDeletedGet.status(),
-        `expect status code ${expectedStatusNotDeletedComment}, and received ${responseCommentNotDeletedGet.status()}`,
-      ).toBe(expectedStatusNotDeletedComment);
+      await expectGetResponseStatus(
+        request,
+        `${apiUrl.commentsUrl}/${comment.id}`,
+        expectedStatusNotDeletedComment,
+      );
     });
   });
 });

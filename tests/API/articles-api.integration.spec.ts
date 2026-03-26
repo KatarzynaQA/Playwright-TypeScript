@@ -1,3 +1,4 @@
+import { expectGetResponseStatus } from '@_src/api/assertions/assertions.api';
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
@@ -70,12 +71,12 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
       ).toBe(expectedStatusCode);
 
       // Assert check deleted article
-      const responseArticleGet = await request.get(`${apiUrl.articlesUrl}/${articleId}`);
       const expectedDeletedArticleStatusCode = 404;
-      expect(
-        responseArticleGet.status(),
-        `expected status code ${expectedDeletedArticleStatusCode}, and received ${responseArticleGet.status()}`,
-      ).toBe(expectedDeletedArticleStatusCode);
+      await expectGetResponseStatus(
+        request,
+        `${apiUrl.articlesUrl}/${articleId}`,
+        expectedDeletedArticleStatusCode,
+      );
     });
 
     test('should not delete an article with non logged-in user @GAD-R08-05', async ({
@@ -97,12 +98,12 @@ test.describe('Verify articles CRUD operations', { tag: '@crud' }, () => {
       ).toBe(expectedStatusCode);
 
       // Assert check not deleted article
-      const responseArticleGet = await request.get(`${apiUrl.articlesUrl}/${articleId}`);
       const expectedNotDeletedArticleStatusCode = 200;
-      expect(
-        responseArticleGet.status(),
-        `expected status code ${expectedNotDeletedArticleStatusCode}, and received ${responseArticleGet.status()}`,
-      ).toBe(expectedNotDeletedArticleStatusCode);
+      await expectGetResponseStatus(
+        request,
+        `${apiUrl.articlesUrl}/${articleId}`,
+        expectedNotDeletedArticleStatusCode,
+      );
     });
   });
 });
