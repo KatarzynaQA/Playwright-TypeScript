@@ -3,16 +3,16 @@ import { createArticleWithApi } from '@_src/api/factories/article-create.api.fac
 import { createCommentWithApi } from '@_src/api/factories/comment-create.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
-import { CommentPayload } from '@_src/api/models/comment-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { APIResponse, expect, test } from '@playwright/test';
 
-test.describe('Verify comment CRUD operations', () => {
+test.describe('Verify comment DELETE operations', () => {
   let articleId: number;
   let headers: Headers;
+  let responseComment: APIResponse;
 
-  test.beforeAll('create an article', async ({ request }) => {
+  test.beforeAll('Create an article', async ({ request }) => {
     headers = await loginAndGetAuthorizationToken(request);
     const responseArticle = await createArticleWithApi(request, headers);
 
@@ -20,47 +20,18 @@ test.describe('Verify comment CRUD operations', () => {
     articleId = article.id;
   });
 
-  test('should not create a comment without a logged-in user @GAD-R08-04', async ({ request }) => {
-    // Arrange
-    const expectedStatusCode = 401;
+  test.beforeEach('Create a comment', async ({ request }) => {
     const commentData = prepareCommentPayload(articleId);
+    responseComment = await createCommentWithApi(request, headers, articleId, commentData);
 
-    // Act:
-    const response = await request.post(apiUrl.commentsUrl, {
-      data: commentData,
-    });
-    // Assert:
-    expect(response.status()).toBe(expectedStatusCode);
+    // TODO linked issue
+    await new Promise((resolve) => setTimeout(resolve, 5000));
   });
 
-  test.describe('crud operations', () => {
-    let responseComment: APIResponse;
-    let commentData: CommentPayload;
-
-    test.beforeEach('create a comment', async ({ request }) => {
-      commentData = prepareCommentPayload(articleId);
-      responseComment = await createCommentWithApi(request, headers, articleId, commentData);
-
-      // TODO linked issue
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-    });
-
-    test('should create a comment with logged-in user @GAD-R08-04', async () => {
-      // Arrange
-      const expectedStatusCode = 201;
-
-      // Assert
-      const actualResponseStatus = responseComment.status();
-      expect(
-        actualResponseStatus,
-        `expect status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
-      ).toBe(expectedStatusCode);
-
-      const comment = await responseComment.json();
-      expect.soft(comment.body).toEqual(commentData.body);
-    });
-
-    test('should delete a comment with logged-in user @GAD-R08-06', async ({ request }) => {
+  test(
+    'Should delete a comment with logged-in user',
+    { tag: '@GAD-R08-06 @api @comments' },
+    async ({ request }) => {
       // Arrange
       const expectedStatusCode = 200;
       const comment = await responseComment.json();
@@ -84,11 +55,13 @@ test.describe('Verify comment CRUD operations', () => {
         `${apiUrl.commentsUrl}/${comment.id}`,
         expectedStatusDeletedComment,
       );
-    });
+    },
+  );
 
-    test('should not delete a comment with a non logged-in user @GAD-R08-06', async ({
-      request,
-    }) => {
+  test(
+    'Should not delete a comment with a non logged-in user',
+    { tag: '@GAD-R08-06 @api @comments' },
+    async ({ request }) => {
       // Arrange
       const expectedStatusCode = 401;
       const comment = await responseComment.json();
@@ -110,6 +83,6 @@ test.describe('Verify comment CRUD operations', () => {
         `${apiUrl.commentsUrl}/${comment.id}`,
         expectedStatusNotDeletedComment,
       );
-    });
-  });
+    },
+  );
 });
