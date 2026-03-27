@@ -7,7 +7,7 @@ export function prepareArticlePayload(): ArticlePayload {
   const articleData = {
     title: randomArticleData.articleTitle,
     body: randomArticleData.articleBody,
-    date: '2026-03-20T11:02:51.237Z',
+    date: new Date().toISOString(),
     image: 'string',
   };
 
