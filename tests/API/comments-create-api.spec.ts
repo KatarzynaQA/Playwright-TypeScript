@@ -21,7 +21,7 @@ test.describe('Verify comment CREATE operations', () => {
     articleId = article.id;
   });
 
-  test('Should not create a comment without a logged-in user @GAD-R08-04', async ({ request }) => {
+  test('Should not create a comment without a logged-in user @GAD-R09-02', async ({ request }) => {
     // Arrange
     const expectedStatusCode = 401;
     const commentData = prepareCommentPayload(articleId);

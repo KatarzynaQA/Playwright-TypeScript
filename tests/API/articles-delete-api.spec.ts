@@ -21,55 +21,63 @@ test.describe('Verify articles DELETE operations', { tag: '@crud @api' }, () => 
     responseArticle = await createArticleWithApi(request, headers, articleData);
   });
 
-  test('Should delete an article with logged-in user @GAD-R08-05', async ({ request }) => {
-    // Arrange
-    const expectedStatusCode = 200;
-    const articleJson = await responseArticle.json();
-    const articleId = articleJson.id;
+  test(
+    'Should delete an article with logged-in user',
+    { tag: '@GAD-R09-03' },
+    async ({ request }) => {
+      // Arrange
+      const expectedStatusCode = 200;
+      const articleJson = await responseArticle.json();
+      const articleId = articleJson.id;
 
-    // Act
-    const responseArticleDelete = await request.delete(`${apiUrl.articlesUrl}/${articleId}`, {
-      headers,
-    });
+      // Act
+      const responseArticleDelete = await request.delete(`${apiUrl.articlesUrl}/${articleId}`, {
+        headers,
+      });
 
-    // Assert
-    const actualResponseStatus = responseArticleDelete.status();
-    expect(
-      actualResponseStatus,
-      `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
-    ).toBe(expectedStatusCode);
+      // Assert
+      const actualResponseStatus = responseArticleDelete.status();
+      expect(
+        actualResponseStatus,
+        `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
+      ).toBe(expectedStatusCode);
 
-    // Assert check deleted article
-    const expectedDeletedArticleStatusCode = 404;
-    await expectGetResponseStatus(
-      request,
-      `${apiUrl.articlesUrl}/${articleId}`,
-      expectedDeletedArticleStatusCode,
-    );
-  });
+      // Assert check deleted article
+      const expectedDeletedArticleStatusCode = 404;
+      await expectGetResponseStatus(
+        request,
+        `${apiUrl.articlesUrl}/${articleId}`,
+        expectedDeletedArticleStatusCode,
+      );
+    },
+  );
 
-  test('Should not delete an article with non logged-in user @GAD-R08-05', async ({ request }) => {
-    // Arrange
-    const expectedStatusCode = 401;
-    const articleJson = await responseArticle.json();
-    const articleId = articleJson.id;
+  test(
+    'Should not delete an article with non logged-in user',
+    { tag: '@GAD-R09-03' },
+    async ({ request }) => {
+      // Arrange
+      const expectedStatusCode = 401;
+      const articleJson = await responseArticle.json();
+      const articleId = articleJson.id;
 
-    // Act
-    const responseArticleDelete = await request.delete(`${apiUrl.articlesUrl}/${articleId}`);
+      // Act
+      const responseArticleDelete = await request.delete(`${apiUrl.articlesUrl}/${articleId}`);
 
-    // Assert
-    const actualResponseStatus = responseArticleDelete.status();
-    expect(
-      actualResponseStatus,
-      `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
-    ).toBe(expectedStatusCode);
+      // Assert
+      const actualResponseStatus = responseArticleDelete.status();
+      expect(
+        actualResponseStatus,
+        `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
+      ).toBe(expectedStatusCode);
 
-    // Assert check not deleted article
-    const expectedNotDeletedArticleStatusCode = 200;
-    await expectGetResponseStatus(
-      request,
-      `${apiUrl.articlesUrl}/${articleId}`,
-      expectedNotDeletedArticleStatusCode,
-    );
-  });
+      // Assert check not deleted article
+      const expectedNotDeletedArticleStatusCode = 200;
+      await expectGetResponseStatus(
+        request,
+        `${apiUrl.articlesUrl}/${articleId}`,
+        expectedNotDeletedArticleStatusCode,
+      );
+    },
+  );
 });
