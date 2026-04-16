@@ -1,0 +1,10 @@
+{
+  "servers": {
+    "my-mcp-server-playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  },
+  "inputs": []
+}
