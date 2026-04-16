@@ -6,12 +6,12 @@ test.describe('Verify user login to account', () => {
   test(
     'User can login with correct credentials',
     { tag: '@GAD-R02 @S02' },
-    async ({ welcomePage, loginPage }) => {
+    async ({ loginPage }) => {
       // Arrange:
       const expectedPageTitle = 'Welcome';
 
       // Act:
-      await loginPage.loginUser(userData);
+      const welcomePage = await loginPage.loginUser(userData);
 
       const welcomeTitle = await welcomePage.getTitle();
 

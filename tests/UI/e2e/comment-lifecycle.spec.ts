@@ -8,7 +8,6 @@ import { ArticlesPage } from '@_src/ui/pages/articles.page';
 import { CommentPage } from '@_src/ui/pages/comment.page';
 import { EditCommentPage } from '@_src/ui/pages/edit-comment.page';
 import { LoginPage } from '@_src/ui/pages/login.page';
-import { WelcomePage } from '@_src/ui/pages/welcome.page';
 import { userData } from '@_src/ui/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
@@ -17,7 +16,6 @@ test.describe.configure({ mode: 'serial' });
 test.describe('Operate on comments - create, verify and delete', () => {
   let loginPage: LoginPage;
   let articlesPage: ArticlesPage;
-  let welcomePage: WelcomePage;
   let articlePage: ArticlePage;
   let articleData: AddArticleModel;
   let addCommentPage: AddCommentPage;
@@ -27,7 +25,6 @@ test.describe('Operate on comments - create, verify and delete', () => {
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     articlesPage = new ArticlesPage(page);
-    welcomePage = new WelcomePage(page);
     articlePage = new ArticlePage(page);
     addCommentPage = new AddCommentPage(page);
     commentPage = new CommentPage(page);
@@ -35,7 +32,7 @@ test.describe('Operate on comments - create, verify and delete', () => {
 
     articleData = prepareRandomArticleData();
     await loginPage.goto();
-    await loginPage.loginUser(userData);
+    const welcomePage = await loginPage.loginUser(userData);
     await welcomePage.clickArticlesButton();
     await articlesPage.addArticleButton.click();
     await articlesPage.addArticleFormComponent.createNewArticle(articleData);

@@ -5,7 +5,7 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
   test(
     'User can register to the service using required fields',
     { tag: '@GAD-R03-01, @GAD-R03-02, @GAD-R03-03' },
-    async ({ loginPage, welcomePage, registerPage }) => {
+    async ({ loginPage, registerPage }) => {
       // Arrange:
       const expectPopupText = 'User created';
       const expectedLoginPageTitle = 'Login';
@@ -25,7 +25,7 @@ test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
       expect(title).toContain(expectedLoginPageTitle);
 
       //Assert
-      await loginPage.loginUser({
+      const welcomePage = await loginPage.loginUser({
         userName: registerUserData.userEmail,
         userPassword: registerUserData.password,
       });
