@@ -4,12 +4,13 @@ test.describe('Verify main menu button', () => {
   test(
     'Comments button navigates to comments page',
     { tag: '@GAD-R01-03' },
-    async ({ commentsPage, articlesPage }) => {
+    async ({ articlesPage }) => {
       // Arrange:
       const expectedTitle = 'Comments';
 
       // Act:
-      await articlesPage.mainMenuComponent.commentsButton.click();
+      // await articlesPage.mainMenuComponent.commentsButton.click();
+      const commentsPage = await articlesPage.mainMenuComponent.clickCommentsButton();
       const title = await commentsPage.getTitle();
 
       // Assert:
@@ -20,12 +21,12 @@ test.describe('Verify main menu button', () => {
   test(
     'Articles button navigates to articles page',
     { tag: '@GAD-R01-03' },
-    async ({ articlesPage, commentsPage }) => {
+    async ({ commentsPage }) => {
       // Arrange:
       const expectedTitle = 'Articles';
 
       // Act:
-      await commentsPage.mainMenuComponent.articlesButton.click();
+      const articlesPage = await commentsPage.mainMenuComponent.clickArticlesButton();
       const title = await articlesPage.getTitle();
 
       // Assert:
@@ -36,12 +37,12 @@ test.describe('Verify main menu button', () => {
   test(
     'Home page button navigates to main page',
     { tag: '@GAD-R01-03' },
-    async ({ articlesPage, homePage }) => {
+    async ({ articlesPage }) => {
       // Arrange:
       const expectedTitle = 'GAD';
 
       // Act:
-      await articlesPage.mainMenuComponent.clickHomePageLink();
+      const homePage = await articlesPage.mainMenuComponent.clickHomePageLink();
       const title = await homePage.getTitle();
 
       // Assert:
