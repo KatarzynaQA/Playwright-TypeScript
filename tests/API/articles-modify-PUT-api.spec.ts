@@ -1,4 +1,3 @@
-import { expectGetResponseStatus } from '@_src/api/assertions/assertions.api';
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
@@ -7,7 +6,7 @@ import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { APIResponse, expect, test } from '@playwright/test';
 
-test.describe('Verify articles modification operations', { tag: '@crud @api' }, () => {
+test.describe('Verify articles modification operations', { tag: '@crud @api @article' }, () => {
   let responseArticle: APIResponse;
   let headers: Headers;
   let articleData: ArticlePayload;
@@ -29,55 +28,59 @@ test.describe('Verify articles modification operations', { tag: '@crud @api' }, 
       const expectedStatusCode = 200;
       const articleJson = await responseArticle.json();
       const articleId = articleJson.id;
+      const modifiedArticleData = prepareArticlePayload();
 
       // Act
-      const responseArticleDelete = await request.delete(`${apiUrl.articlesUrl}/${articleId}`, {
+      const responseArticlePut = await request.put(`${apiUrl.articlesUrl}/${articleId}`, {
         headers,
+        data: modifiedArticleData,
       });
 
       // Assert
-      const actualResponseStatus = responseArticleDelete.status();
+      const actualResponseStatus = responseArticlePut.status();
       expect(
         actualResponseStatus,
         `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
       ).toBe(expectedStatusCode);
 
-      // Assert check deleted article
-      const expectedDeletedArticleStatusCode = 404;
-      await expectGetResponseStatus(
-        request,
-        `${apiUrl.articlesUrl}/${articleId}`,
-        expectedDeletedArticleStatusCode,
-      );
+      const articleModifyResponseJson = await responseArticlePut.json();
+
+      expect.soft(articleModifyResponseJson.title).toEqual(modifiedArticleData.title);
+      expect.soft(articleModifyResponseJson.body).toEqual(modifiedArticleData.body);
+      expect.soft(articleModifyResponseJson.title).not.toEqual(articleData.title);
+      expect.soft(articleModifyResponseJson.body).not.toEqual(articleData.body);
     },
   );
 
   test(
-    'Should not delete an article with non logged-in user',
-    { tag: '@GAD-R09-03' },
+    'Should not modify an article with non logged-in user',
+    { tag: '@GAD-R10-01' },
     async ({ request }) => {
       // Arrange
       const expectedStatusCode = 401;
       const articleJson = await responseArticle.json();
       const articleId = articleJson.id;
+      const modifiedArticleData = prepareArticlePayload();
 
       // Act
-      const responseArticleDelete = await request.delete(`${apiUrl.articlesUrl}/${articleId}`);
+      const responseArticlePut = await request.put(`${apiUrl.articlesUrl}/${articleId}`, {
+        data: modifiedArticleData,
+      });
 
       // Assert
-      const actualResponseStatus = responseArticleDelete.status();
+      const actualResponseStatus = responseArticlePut.status();
       expect(
         actualResponseStatus,
         `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
       ).toBe(expectedStatusCode);
 
-      // Assert check not deleted article
-      const expectedNotDeletedArticleStatusCode = 200;
-      await expectGetResponseStatus(
-        request,
-        `${apiUrl.articlesUrl}/${articleId}`,
-        expectedNotDeletedArticleStatusCode,
-      );
+      const nonArticleModifiedResponse = await request.get(`${apiUrl.articlesUrl}/${articleId}`);
+      const nonArticleModifiedResponseJson = await nonArticleModifiedResponse.json();
+
+      expect.soft(nonArticleModifiedResponseJson.title).not.toEqual(modifiedArticleData.title);
+      expect.soft(nonArticleModifiedResponseJson.body).not.toEqual(modifiedArticleData.body);
+      expect.soft(nonArticleModifiedResponseJson.title).toEqual(articleData.title);
+      expect.soft(nonArticleModifiedResponseJson.body).toEqual(articleData.body);
     },
   );
 });
