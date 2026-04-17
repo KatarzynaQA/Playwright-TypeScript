@@ -52,5 +52,36 @@ test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles'
       expect.soft(articleJson.title).toEqual(articleData.title);
       expect.soft(articleJson.body).toEqual(articleData.body);
     });
+
+    test(
+      'Should create a new article when modified id not exist with logged-in user',
+      { tag: '@GAD-R10-01' },
+      async ({ request }) => {
+        // Arrange
+        const expectedStatusCode = 201;
+        const articleData = prepareArticlePayload();
+
+        // Act
+        const responseArticlePut = await request.put(
+          `${apiUrl.articlesUrl}/${new Date().valueOf()}`,
+          {
+            headers,
+            data: articleData,
+          },
+        );
+
+        // Assert
+        const actualResponseStatus = responseArticlePut.status();
+        expect(
+          actualResponseStatus,
+          `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
+        ).toBe(expectedStatusCode);
+
+        const articleResponseJson = await responseArticlePut.json();
+
+        expect.soft(articleResponseJson.title).toEqual(articleData.title);
+        expect.soft(articleResponseJson.body).toEqual(articleData.body);
+      },
+    );
   });
 });
