@@ -21,7 +21,7 @@ test.describe('Verify comment CREATE operations', () => {
     articleId = article.id;
   });
 
-  test('Should not create a comment without a logged-in user @GAD-R08-04', async ({ request }) => {
+  test('Should not create a comment without a logged-in user @GAD-R09-02', async ({ request }) => {
     // Arrange
     const expectedStatusCode = 401;
     const commentData = prepareCommentPayload(articleId);
@@ -56,4 +56,38 @@ test.describe('Verify comment CREATE operations', () => {
     const comment = await responseComment.json();
     expect.soft(comment.body).toEqual(commentData.body);
   });
+
+  test(
+    'should create a comment when modification on nonexisting id requested with logged-in user',
+    { tag: '@GAD-R10-02' },
+    async ({ request }) => {
+      // Arrange
+      const expectedStatusCode = 201;
+      const commentData = prepareCommentPayload(articleId);
+
+      // Act
+      const responseCommentPut = await request.put(
+        `${apiUrl.commentsUrl}/${new Date().valueOf()}`,
+        {
+          headers,
+          data: commentData,
+        },
+      );
+
+      // Assert
+      const actualResponseStatus = responseCommentPut.status();
+      expect(
+        actualResponseStatus,
+        `expect status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
+      ).toBe(expectedStatusCode);
+
+      const responseCommentPutJson = await responseCommentPut.json();
+
+      const commentGet = await request.get(`${apiUrl.commentsUrl}/${responseCommentPutJson.id}`);
+
+      const commentJsonGet = await commentGet.json();
+
+      expect.soft(commentJsonGet.body).toEqual(commentData.body);
+    },
+  );
 });

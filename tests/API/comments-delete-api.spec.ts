@@ -30,7 +30,7 @@ test.describe('Verify comment DELETE operations', () => {
 
   test(
     'Should delete a comment with logged-in user',
-    { tag: '@GAD-R08-06 @api @comments' },
+    { tag: '@GAD-R09-04 @api @comments' },
     async ({ request }) => {
       // Arrange
       const expectedStatusCode = 200;
