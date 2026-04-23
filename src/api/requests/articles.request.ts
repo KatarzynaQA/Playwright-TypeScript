@@ -11,4 +11,8 @@ export class ArticlesRequest {
   async get(): Promise<APIResponse> {
     return await this.request.get(this.url);
   }
+
+  async getOne(articleId: string): Promise<APIResponse> {
+    return await this.request.get(`${this.url}/${articleId}`);
+  }
 }

@@ -4,7 +4,8 @@ import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { APIResponse, expect, test } from '@playwright/test';
+import { expect, test } from '@_src/merge.fixture';
+import { APIResponse } from '@playwright/test';
 
 test.describe('Verify articles modification operations', { tag: '@crud @api @article' }, () => {
   let responseArticle: APIResponse;
@@ -56,7 +57,7 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
     test(
       'Should not modify an article with non logged-in user',
       { tag: '@GAD-R10-01' },
-      async ({ request }) => {
+      async ({ request, articlesRequest }) => {
         // Arrange
         const expectedStatusCode = 401;
         const articleJson = await responseArticle.json();
@@ -75,7 +76,7 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
           `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
         ).toBe(expectedStatusCode);
 
-        const nonArticleModifiedResponse = await request.get(`${apiUrl.articlesUrl}/${articleId}`);
+        const nonArticleModifiedResponse = await articlesRequest.getOne(articleId);
         const nonArticleModifiedResponseJson = await nonArticleModifiedResponse.json();
 
         expect.soft(nonArticleModifiedResponseJson.title).not.toEqual(modifiedArticleData.title);
