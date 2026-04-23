@@ -1,26 +1,24 @@
+import { ArticlesRequest } from '../requests/articles.request';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
-import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect } from '@_src/merge.fixture';
-import { APIRequestContext, APIResponse } from '@playwright/test';
+import { APIResponse } from '@playwright/test';
 
 export async function createArticleWithApi(
-  request: APIRequestContext,
+  articlesRequest: ArticlesRequest,
   headers: Headers,
   articleData?: ArticlePayload,
 ): Promise<APIResponse> {
   const articleFinalData = articleData || prepareArticlePayload();
-  const responseArticle = await request.post(apiUrl.articlesUrl, {
-    headers,
-    data: articleFinalData,
-  });
+  const responseArticle = await articlesRequest.post(headers, articleFinalData);
 
   // assert article exist
   const articleJson = await responseArticle.json();
   const expectedStatusCode = 200;
   await expect(async () => {
-    const responseArticleCreated = await request.get(`${apiUrl.articlesUrl}/${articleJson.id}`);
+    const responseArticleCreated = await articlesRequest.getOne(articleJson.id);
+
     expect(
       responseArticleCreated.status(),
       `Expected status: ${expectedStatusCode} and observed: ${responseArticleCreated.status()}`,
