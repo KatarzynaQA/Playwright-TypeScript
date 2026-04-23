@@ -1,5 +1,5 @@
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { expect, test } from '@_src/ui/fixtures/merge.fixture';
+import { expect, test } from '@_src/merge.fixture';
 
 test.describe('Verify articles API endpoint', () => {
   test(

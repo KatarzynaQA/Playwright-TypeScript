@@ -1,6 +1,6 @@
+import { expect, test } from '@_src/merge.fixture';
 import { prepareRandomArticleData } from '@_src/ui/factories/article.factory';
 import { prepareRandomCommentData } from '@_src/ui/factories/comment.factory';
-import { expect, test } from '@_src/ui/fixtures/merge.fixture';
 import { AddArticleModel } from '@_src/ui/models/article.model';
 import { ArticlePage } from '@_src/ui/pages/article.page';
 import { ArticlesPage } from '@_src/ui/pages/articles.page';

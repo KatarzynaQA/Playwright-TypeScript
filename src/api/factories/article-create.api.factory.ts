@@ -2,7 +2,7 @@ import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.f
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { expect } from '@_src/ui/fixtures/merge.fixture';
+import { expect } from '@_src/merge.fixture';
 import { APIRequestContext, APIResponse } from '@playwright/test';
 
 export async function createArticleWithApi(
