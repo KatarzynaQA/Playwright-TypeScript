@@ -1,19 +1,22 @@
-// export function logConsole(message: string, args?: unknown): void {
-//   console.log(`[LOG]: ${message}`, args);
-// }
+import { getLogger } from './pino-logger';
 
-// export function logDebug(message: string, args?: unknown): void {
-//   console.debug(`[DEBUG]: ${message}`, args);
-// }
+export function logConsole(message: string, args?: unknown): void {
+  // console.log(`[LOG] ${message}`, args)
+  getLogger().info({ args }, `[LOG]: ${message}`);
+}
 
-// export function logError(message: string, args?: unknown): void {
-//   console.error(`[ERROR]: ${message}`, args);
-// }
+export function logDebug(message: string, args?: unknown): void {
+  getLogger().debug({ args }, `[DEBUG]: ${message}`);
+}
 
-// export function logWarning(message: string, args?: unknown): void {
-//   console.warn(`[WARNING]: ${message}`, args);
-// }
+export function logError(message: string, args?: unknown): void {
+  getLogger().error({ args }, `[ERROR]: ${message}`);
+}
 
-// export function logInfo(message: string, args?: unknown): void {
-//   console.info(`[INFO]: ${message}`, args);
-// }
+export function logWarning(message: string, args?: unknown): void {
+  getLogger().warn({ args }, `[WARNING]: ${message}`);
+}
+
+export function logInfo(message: string, args?: unknown): void {
+  getLogger().info({ args }, `[INFO]: ${message}`);
+}

@@ -1,4 +1,5 @@
 import { STORAGE_STATE } from '@_pw-config';
+import { logDebug } from '@_src/logger/logger-api';
 import { expect, test as setup } from '@_src/ui/fixtures/merge.fixture';
 import { userData } from '@_src/ui/test-data/user.data';
 
@@ -12,6 +13,7 @@ setup('Login and save session', async ({ welcomePage, loginPage, page }) => {
   const welcomeTitle = await welcomePage.getTitle();
 
   // Assert:
+  logDebug('Print log');
   expect(welcomeTitle).toContain(expectedPageTitle);
   //   await page.context().storageState({ path: 'session.json' });
   await page.context().storageState({ path: STORAGE_STATE });
