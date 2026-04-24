@@ -5,7 +5,8 @@ import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get
 import { CommentPayload } from '@_src/api/models/comment-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { APIResponse, expect, test } from '@playwright/test';
+import { expect, test } from '@_src/merge.fixture';
+import { APIResponse } from '@playwright/test';
 
 test.describe('Verify comment CREATE operations', () => {
   let articleId: number;
@@ -13,9 +14,9 @@ test.describe('Verify comment CREATE operations', () => {
   let responseComment: APIResponse;
   let commentData: CommentPayload;
 
-  test.beforeAll('Create an article', async ({ request }) => {
+  test.beforeAll('Create an article', async ({ request, articlesRequestLogged }) => {
     headers = await loginAndGetAuthorizationToken(request);
-    const responseArticle = await createArticleWithApi(request, headers);
+    const responseArticle = await createArticleWithApi(articlesRequestLogged);
 
     const article = await responseArticle.json();
     articleId = article.id;

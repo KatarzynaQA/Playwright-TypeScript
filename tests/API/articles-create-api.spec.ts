@@ -4,7 +4,8 @@ import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { APIResponse, expect, test } from '@playwright/test';
+import { expect, test } from '@_src/merge.fixture';
+import { APIResponse } from '@playwright/test';
 
 test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles' }, () => {
   const articleData = prepareArticlePayload();
@@ -34,13 +35,15 @@ test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles'
       headers = await loginAndGetAuthorizationToken(request);
     });
 
-    test('Should create an article with logged-in user @GAD-R08-03', async ({ request }) => {
+    test('Should create an article with logged-in user @GAD-R08-03', async ({
+      articlesRequestLogged,
+    }) => {
       // Arrange
       const expectedStatusCode = 201;
 
       //Act
       articleData = prepareArticlePayload();
-      responseArticle = await createArticleWithApi(request, headers, articleData);
+      responseArticle = await createArticleWithApi(articlesRequestLogged, articleData);
       // Assert
       const actualResponseStatus = responseArticle.status();
       expect(

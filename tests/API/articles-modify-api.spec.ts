@@ -16,9 +16,9 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
     headers = await loginAndGetAuthorizationToken(request);
   });
 
-  test.beforeEach('Create an article', async ({ request }) => {
+  test.beforeEach('Create an article', async ({ articlesRequestLogged }) => {
     articleData = prepareArticlePayload();
-    responseArticle = await createArticleWithApi(request, headers, articleData);
+    responseArticle = await createArticleWithApi(articlesRequestLogged, articleData);
   });
 
   test.describe('Fully modify by PUT', () => {

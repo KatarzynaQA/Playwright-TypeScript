@@ -6,8 +6,12 @@ import { APIRequestContext, APIResponse } from '@playwright/test';
 export class ArticlesRequest {
   url: string;
 
-  constructor(protected request: APIRequestContext) {
+  constructor(
+    protected request: APIRequestContext,
+    protected headers?: Headers,
+  ) {
     this.url = apiUrl.articlesUrl;
+    this.headers = headers;
   }
 
   async get(): Promise<APIResponse> {
@@ -18,9 +22,9 @@ export class ArticlesRequest {
     return await this.request.get(`${this.url}/${articleId}`);
   }
 
-  async post(headers: Headers, data: ArticlePayload): Promise<APIResponse> {
+  async post(data: ArticlePayload): Promise<APIResponse> {
     return await this.request.post(this.url, {
-      headers,
+      headers: this.headers,
       data,
     });
   }

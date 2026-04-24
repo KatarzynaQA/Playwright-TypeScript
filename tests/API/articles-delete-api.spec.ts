@@ -5,7 +5,8 @@ import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { APIResponse, expect, test } from '@playwright/test';
+import { expect, test } from '@_src/merge.fixture';
+import { APIResponse } from '@playwright/test';
 
 test.describe('Verify articles DELETE operations', { tag: '@crud @api' }, () => {
   let responseArticle: APIResponse;
@@ -16,9 +17,9 @@ test.describe('Verify articles DELETE operations', { tag: '@crud @api' }, () => 
     headers = await loginAndGetAuthorizationToken(request);
   });
 
-  test.beforeEach('Create an article', async ({ request }) => {
+  test.beforeEach('Create an article', async ({ articlesRequestLogged }) => {
     articleData = prepareArticlePayload();
-    responseArticle = await createArticleWithApi(request, headers, articleData);
+    responseArticle = await createArticleWithApi(articlesRequestLogged, articleData);
   });
 
   test(
