@@ -13,14 +13,13 @@ test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles'
   test(
     'Should not create article without a logged-in user',
     { tag: '@GAD-R09-01' },
-    async ({ request }) => {
+    async ({ articlesRequest }) => {
       // Arrange:
       const expectedStatusCode = 401;
 
       // Act:
-      const response = await request.post(apiUrl.articlesUrl, {
-        data: articleData,
-      });
+      const response = await articlesRequest.post(articleData);
+
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
     },
