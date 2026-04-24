@@ -1,8 +1,7 @@
-import { expectGetResponseStatus } from '@_src/api/assertions/assertions.api';
+import { expectGetOneResponseStatus } from '@_src/api/assertions/assertions.api';
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
-import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@_src/merge.fixture';
 import { APIResponse } from '@playwright/test';
 
@@ -19,7 +18,7 @@ test.describe('Verify articles DELETE operations', { tag: '@crud @api' }, () => 
   test(
     'Should delete an article with logged-in user',
     { tag: '@GAD-R09-03' },
-    async ({ request, articlesRequestLogged }) => {
+    async ({ articlesRequestLogged }) => {
       // Arrange
       const expectedStatusCode = 200;
       const articleJson = await responseArticle.json();
@@ -37,10 +36,10 @@ test.describe('Verify articles DELETE operations', { tag: '@crud @api' }, () => 
 
       // Assert check deleted article
       const expectedDeletedArticleStatusCode = 404;
-      await expectGetResponseStatus(
-        request,
-        `${apiUrl.articlesUrl}/${articleId}`,
+      await expectGetOneResponseStatus(
+        articlesRequestLogged,
         expectedDeletedArticleStatusCode,
+        articleId,
       );
     },
   );
@@ -48,7 +47,7 @@ test.describe('Verify articles DELETE operations', { tag: '@crud @api' }, () => 
   test(
     'Should not delete an article with non logged-in user',
     { tag: '@GAD-R09-03' },
-    async ({ request, articlesRequest }) => {
+    async ({ articlesRequest }) => {
       // Arrange
       const expectedStatusCode = 401;
       const articleJson = await responseArticle.json();
@@ -66,10 +65,10 @@ test.describe('Verify articles DELETE operations', { tag: '@crud @api' }, () => 
 
       // Assert check not deleted article
       const expectedNotDeletedArticleStatusCode = 200;
-      await expectGetResponseStatus(
-        request,
-        `${apiUrl.articlesUrl}/${articleId}`,
+      await expectGetOneResponseStatus(
+        articlesRequest,
         expectedNotDeletedArticleStatusCode,
+        articleId,
       );
     },
   );

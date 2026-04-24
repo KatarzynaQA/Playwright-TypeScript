@@ -1,8 +1,7 @@
-import { expectGetResponseStatus } from '@_src/api/assertions/assertions.api';
+import { expectGetOneResponseStatus } from '@_src/api/assertions/assertions.api';
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { createCommentWithApi } from '@_src/api/factories/comment-create.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
-import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@_src/merge.fixture';
 import { APIResponse } from '@playwright/test';
 
@@ -28,7 +27,7 @@ test.describe('Verify comment DELETE operations', () => {
   test(
     'Should delete a comment with logged-in user',
     { tag: '@GAD-R09-04 @api @comments' },
-    async ({ request, commentsRequestLogged }) => {
+    async ({ commentsRequestLogged }) => {
       // Arrange
       const expectedStatusCode = 200;
       const comment = await responseComment.json();
@@ -45,10 +44,10 @@ test.describe('Verify comment DELETE operations', () => {
 
       // Assert deleted comment
       const expectedStatusDeletedComment = 404;
-      await expectGetResponseStatus(
-        request,
-        `${apiUrl.commentsUrl}/${comment.id}`,
+      await expectGetOneResponseStatus(
+        commentsRequestLogged,
         expectedStatusDeletedComment,
+        comment.id,
       );
     },
   );
@@ -56,7 +55,7 @@ test.describe('Verify comment DELETE operations', () => {
   test(
     'Should not delete a comment with a non logged-in user',
     { tag: '@GAD-R08-06 @api @comments' },
-    async ({ request, commentsRequest }) => {
+    async ({ commentsRequest }) => {
       // Arrange
       const expectedStatusCode = 401;
       const comment = await responseComment.json();
@@ -73,10 +72,10 @@ test.describe('Verify comment DELETE operations', () => {
 
       // Assert non deleted comment
       const expectedStatusNotDeletedComment = 200;
-      await expectGetResponseStatus(
-        request,
-        `${apiUrl.commentsUrl}/${comment.id}`,
+      await expectGetOneResponseStatus(
+        commentsRequest,
         expectedStatusNotDeletedComment,
+        comment.id,
       );
     },
   );
