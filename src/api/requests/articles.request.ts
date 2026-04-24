@@ -28,4 +28,24 @@ export class ArticlesRequest {
       data,
     });
   }
+
+  async delete(articleId: string): Promise<APIResponse> {
+    return await this.request.delete(`${this.url}/${articleId}`, {
+      headers: this.headers,
+    });
+  }
+
+  async put(articleId: string, data: ArticlePayload): Promise<APIResponse> {
+    return await this.request.put(`${this.url}/${articleId}`, {
+      headers: this.headers,
+      data,
+    });
+  }
+
+  async patch(articleId: string, data: Partial<ArticlePayload>): Promise<APIResponse> {
+    return await this.request.patch(`${this.url}/${articleId}`, {
+      headers: this.headers,
+      data,
+    });
+  }
 }
