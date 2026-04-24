@@ -1,16 +1,15 @@
-import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@_src/merge.fixture';
 
 test.describe('Verify comment API endpoint', () => {
   test(
     'GET comments returns status code 200',
     { tag: '@GAD-R08-02, @api' },
-    async ({ request }) => {
+    async ({ commentsRequest }) => {
       // Arrange:
       const expectedStatusCode = 200;
 
       // Act:
-      const response = await request.get(apiUrl.commentsUrl);
+      const response = await commentsRequest.get();
 
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
@@ -20,12 +19,12 @@ test.describe('Verify comment API endpoint', () => {
   test(
     'GET comments should return at least one object',
     { tag: '@GAD-R08-02, @api' },
-    async ({ request }) => {
+    async ({ commentsRequest }) => {
       //Arrange
       const expectedObjectCount = 1;
 
       //Act
-      const response = await request.get(apiUrl.commentsUrl);
+      const response = await commentsRequest.get();
       const responseJson = await response.json();
 
       //Assert
@@ -36,13 +35,13 @@ test.describe('Verify comment API endpoint', () => {
   test(
     'GET comments returns comment object',
     { tag: '@GAD-R08-02, @api, @predefine_data' },
-    async ({ request }) => {
+    async ({ commentsRequest }) => {
       // Arrange:
       const expectedRequiredProperties = ['id', 'article_id', 'user_id', 'body', 'date'];
 
       // Act:
 
-      const response = await request.get(apiUrl.commentsUrl);
+      const response = await commentsRequest.get();
       const responseJSON = await response.json();
       const comment = responseJSON[0];
 

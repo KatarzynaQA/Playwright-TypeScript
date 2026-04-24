@@ -2,28 +2,24 @@ import { expectGetResponseStatus } from '@_src/api/assertions/assertions.api';
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { createCommentWithApi } from '@_src/api/factories/comment-create.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
-import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
-import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@_src/merge.fixture';
 import { APIResponse } from '@playwright/test';
 
 test.describe('Verify comment DELETE operations', () => {
   let articleId: number;
-  let headers: Headers;
   let responseComment: APIResponse;
 
-  test.beforeAll('Create an article', async ({ request, articlesRequestLogged }) => {
-    headers = await loginAndGetAuthorizationToken(request);
+  test.beforeAll('Create an article', async ({ articlesRequestLogged }) => {
     const responseArticle = await createArticleWithApi(articlesRequestLogged);
 
     const article = await responseArticle.json();
     articleId = article.id;
   });
 
-  test.beforeEach('Create a comment', async ({ request }) => {
+  test.beforeEach('Create a comment', async ({ commentsRequestLogged }) => {
     const commentData = prepareCommentPayload(articleId);
-    responseComment = await createCommentWithApi(request, headers, articleId, commentData);
+    responseComment = await createCommentWithApi(commentsRequestLogged, articleId, commentData);
 
     // TODO linked issue
     await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -32,15 +28,13 @@ test.describe('Verify comment DELETE operations', () => {
   test(
     'Should delete a comment with logged-in user',
     { tag: '@GAD-R09-04 @api @comments' },
-    async ({ request }) => {
+    async ({ request, commentsRequestLogged }) => {
       // Arrange
       const expectedStatusCode = 200;
       const comment = await responseComment.json();
 
       // Act
-      const responseCommentDeleted = await request.delete(`${apiUrl.commentsUrl}/${comment.id}`, {
-        headers,
-      });
+      const responseCommentDeleted = await commentsRequestLogged.delete(comment.id);
 
       // Assert
       const actualResponseStatus = responseCommentDeleted.status();
@@ -62,13 +56,13 @@ test.describe('Verify comment DELETE operations', () => {
   test(
     'Should not delete a comment with a non logged-in user',
     { tag: '@GAD-R08-06 @api @comments' },
-    async ({ request }) => {
+    async ({ request, commentsRequest }) => {
       // Arrange
       const expectedStatusCode = 401;
       const comment = await responseComment.json();
 
       // Act
-      const responseCommentNotDeleted = await request.delete(`${apiUrl.commentsUrl}/${comment.id}`);
+      const responseCommentNotDeleted = await commentsRequest.delete(comment.id);
 
       // Assert
       const actualResponseStatus = responseCommentNotDeleted.status();

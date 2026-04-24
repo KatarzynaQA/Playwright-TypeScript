@@ -1,21 +1,17 @@
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { createCommentWithApi } from '@_src/api/factories/comment-create.api.factory';
 import { prepareCommentPayload } from '@_src/api/factories/comment-payload.api.factory';
-import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
 import { CommentPayload } from '@_src/api/models/comment-payload.api.models';
-import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
 import { expect, test } from '@_src/merge.fixture';
 import { APIResponse } from '@playwright/test';
 
 test.describe('Verify comment modify operations', () => {
   let articleId: number;
-  let headers: Headers;
   let responseComment: APIResponse;
   let commentData: CommentPayload;
 
-  test.beforeAll('Create an article', async ({ request, articlesRequestLogged }) => {
-    headers = await loginAndGetAuthorizationToken(request);
+  test.beforeAll('Create an article', async ({ articlesRequestLogged }) => {
     const responseArticle = await createArticleWithApi(articlesRequestLogged);
 
     const article = await responseArticle.json();
@@ -25,23 +21,21 @@ test.describe('Verify comment modify operations', () => {
   test(
     'Should not create a comment without a logged-in user',
     { tag: '@GAD-R10-02' },
-    async ({ request }) => {
+    async ({ commentsRequest }) => {
       // Arrange
       const expectedStatusCode = 401;
       const commentData = prepareCommentPayload(articleId);
 
       // Act:
-      const response = await request.post(apiUrl.commentsUrl, {
-        data: commentData,
-      });
+      const response = await commentsRequest.post(commentData);
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
     },
   );
 
-  test.beforeEach('Create a comment', async ({ request }) => {
+  test.beforeEach('Create a comment', async ({ commentsRequestLogged }) => {
     commentData = prepareCommentPayload(articleId);
-    responseComment = await createCommentWithApi(request, headers, articleId, commentData);
+    responseComment = await createCommentWithApi(commentsRequestLogged, articleId, commentData);
 
     // TODO linked issue
     await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -49,18 +43,19 @@ test.describe('Verify comment modify operations', () => {
 
   test.describe('Verify comment fully modify operations @api @modify', () => {
     test('Should modify a comment by complete content replacement via the API for logged-in users @GAD-R10-02', async ({
-      request,
+      commentsRequestLogged,
     }) => {
       // Arrange
       const expectedStatusCode = 200;
       const comment = await responseComment.json();
+      const commentId = comment.id;
       const modifiedCommentData = prepareCommentPayload(articleId);
 
       // Act
-      const responseCommentModified = await request.put(`${apiUrl.commentsUrl}/${comment.id}`, {
-        headers,
-        data: modifiedCommentData,
-      });
+      const responseCommentModified = await commentsRequestLogged.put(
+        commentId,
+        modifiedCommentData,
+      );
 
       // Assert
       const actualResponseStatus = responseCommentModified.status();
@@ -78,18 +73,17 @@ test.describe('Verify comment modify operations', () => {
     test(
       'Should not modify a comment via the API for not logged-in users',
       { tag: '@GAD-R10-02' },
-      async ({ request }) => {
+      async ({ request, commentsRequest }) => {
         // Arrange
         const expectedStatusCode = 401;
         const comment = await responseComment.json();
+        const commentId = comment.id;
         const modifiedCommentData = prepareCommentPayload(articleId);
 
         // Act
-        const responseCommentNotModified = await request.put(
-          `${apiUrl.commentsUrl}/${comment.id}`,
-          {
-            data: modifiedCommentData,
-          },
+        const responseCommentNotModified = await commentsRequest.put(
+          commentId,
+          modifiedCommentData,
         );
 
         // Assert
@@ -111,20 +105,21 @@ test.describe('Verify comment modify operations', () => {
 
   test.describe('Verify comment partially modify operations @api @modify', () => {
     test('Should partially modify a comment by complete content replacement via the API for logged-in users @GAD-R10-04', async ({
-      request,
+      commentsRequestLogged,
     }) => {
       // Arrange
       const expectedStatusCode = 200;
       const comment = await responseComment.json();
+      const commentId = comment.id;
       const modifiedCommentData = {
         body: `Modified new body ${new Date().toISOString()}`,
       };
 
       // Act
-      const responseCommentModified = await request.patch(`${apiUrl.commentsUrl}/${comment.id}`, {
-        headers,
-        data: modifiedCommentData,
-      });
+      const responseCommentModified = await commentsRequestLogged.patch(
+        commentId,
+        modifiedCommentData,
+      );
 
       // Assert
       const actualResponseStatus = responseCommentModified.status();
@@ -142,20 +137,19 @@ test.describe('Verify comment modify operations', () => {
     test(
       'Should not partially modify a comment via the API for not logged-in users',
       { tag: '@GAD-R10-04' },
-      async ({ request }) => {
+      async ({ commentsRequest }) => {
         // Arrange
         const expectedStatusCode = 401;
         const comment = await responseComment.json();
+        const commentId = comment.id;
         const modifiedCommentData = {
           body: `Modified new body ${new Date().toISOString()}`,
         };
 
         // Act
-        const responseCommentNotModified = await request.patch(
-          `${apiUrl.commentsUrl}/${comment.id}`,
-          {
-            data: modifiedCommentData,
-          },
+        const responseCommentNotModified = await commentsRequest.patch(
+          commentId,
+          modifiedCommentData,
         );
 
         // Assert
@@ -165,7 +159,7 @@ test.describe('Verify comment modify operations', () => {
           `expect status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
         ).toBe(expectedStatusCode);
 
-        const modifiedCommentGet = await request.get(`${apiUrl.commentsUrl}/${comment.id}`);
+        const modifiedCommentGet = await commentsRequest.getOne(comment.id);
 
         const modifiedCommentJsonGet = await modifiedCommentGet.json();
 
