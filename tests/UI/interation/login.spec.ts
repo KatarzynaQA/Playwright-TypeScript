@@ -1,4 +1,4 @@
-import { expect, test } from '@_src/ui/fixtures/merge.fixture';
+import { expect, test } from '@_src/merge.fixture';
 import { UserLoginModel } from '@_src/ui/models/userLogin.model';
 import { userData } from '@_src/ui/test-data/user.data';
 

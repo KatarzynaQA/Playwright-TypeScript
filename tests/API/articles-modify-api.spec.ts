@@ -1,30 +1,23 @@
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
-import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
-import { Headers } from '@_src/api/models/headers.api.model';
-import { apiUrl } from '@_src/api/utils/api.utils';
-import { APIResponse, expect, test } from '@playwright/test';
+import { expect, test } from '@_src/merge.fixture';
+import { APIResponse } from '@playwright/test';
 
 test.describe('Verify articles modification operations', { tag: '@crud @api @article' }, () => {
   let responseArticle: APIResponse;
-  let headers: Headers;
   let articleData: ArticlePayload;
 
-  test.beforeAll('Should login', async ({ request }) => {
-    headers = await loginAndGetAuthorizationToken(request);
-  });
-
-  test.beforeEach('Create an article', async ({ request }) => {
+  test.beforeEach('Create an article', async ({ articlesRequestLogged }) => {
     articleData = prepareArticlePayload();
-    responseArticle = await createArticleWithApi(request, headers, articleData);
+    responseArticle = await createArticleWithApi(articlesRequestLogged, articleData);
   });
 
   test.describe('Fully modify by PUT', () => {
     test(
       'Should modify and replace content of an article with logged-in user',
       { tag: '@GAD-R10-01' },
-      async ({ request }) => {
+      async ({ articlesRequestLogged }) => {
         // Arrange
         const expectedStatusCode = 200;
         const articleJson = await responseArticle.json();
@@ -32,10 +25,7 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
         const modifiedArticleData = prepareArticlePayload();
 
         // Act
-        const responseArticlePut = await request.put(`${apiUrl.articlesUrl}/${articleId}`, {
-          headers,
-          data: modifiedArticleData,
-        });
+        const responseArticlePut = await articlesRequestLogged.put(articleId, modifiedArticleData);
 
         // Assert
         const actualResponseStatus = responseArticlePut.status();
@@ -56,7 +46,7 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
     test(
       'Should not modify an article with non logged-in user',
       { tag: '@GAD-R10-01' },
-      async ({ request }) => {
+      async ({ articlesRequest }) => {
         // Arrange
         const expectedStatusCode = 401;
         const articleJson = await responseArticle.json();
@@ -64,9 +54,7 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
         const modifiedArticleData = prepareArticlePayload();
 
         // Act
-        const responseArticlePut = await request.put(`${apiUrl.articlesUrl}/${articleId}`, {
-          data: modifiedArticleData,
-        });
+        const responseArticlePut = await articlesRequest.put(articleId, modifiedArticleData);
 
         // Assert
         const actualResponseStatus = responseArticlePut.status();
@@ -75,7 +63,7 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
           `expected status code ${expectedStatusCode}, and received ${actualResponseStatus}`,
         ).toBe(expectedStatusCode);
 
-        const nonArticleModifiedResponse = await request.get(`${apiUrl.articlesUrl}/${articleId}`);
+        const nonArticleModifiedResponse = await articlesRequest.getOne(articleId);
         const nonArticleModifiedResponseJson = await nonArticleModifiedResponse.json();
 
         expect.soft(nonArticleModifiedResponseJson.title).not.toEqual(modifiedArticleData.title);
@@ -86,11 +74,11 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
     );
   });
 
-  test.describe('Partially modify by PUT', () => {
+  test.describe('Partially modify by PATCH', () => {
     test(
       'Should Partially modify and replace content of an article with logged-in user',
       { tag: '@GAD-R10-03' },
-      async ({ request }) => {
+      async ({ articlesRequestLogged }) => {
         // Arrange
         const expectedStatusCode = 200;
         const articleJson = await responseArticle.json();
@@ -99,11 +87,11 @@ test.describe('Verify articles modification operations', { tag: '@crud @api @art
           title: `Modified new title ${new Date().toISOString()}`,
         };
 
-        // Act
-        const responseArticlePut = await request.patch(`${apiUrl.articlesUrl}/${articleId}`, {
-          headers,
-          data: modifiedArticleData,
-        });
+        //Act
+        const responseArticlePut = await articlesRequestLogged.patch(
+          articleId,
+          modifiedArticleData,
+        );
 
         // Assert
         const actualResponseStatus = responseArticlePut.status();

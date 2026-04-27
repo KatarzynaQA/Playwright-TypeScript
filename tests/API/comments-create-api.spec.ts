@@ -5,7 +5,8 @@ import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get
 import { CommentPayload } from '@_src/api/models/comment-payload.api.models';
 import { Headers } from '@_src/api/models/headers.api.model';
 import { apiUrl } from '@_src/api/utils/api.utils';
-import { APIResponse, expect, test } from '@playwright/test';
+import { expect, test } from '@_src/merge.fixture';
+import { APIResponse } from '@playwright/test';
 
 test.describe('Verify comment CREATE operations', () => {
   let articleId: number;
@@ -13,30 +14,31 @@ test.describe('Verify comment CREATE operations', () => {
   let responseComment: APIResponse;
   let commentData: CommentPayload;
 
-  test.beforeAll('Create an article', async ({ request }) => {
+  test.beforeAll('Create an article', async ({ request, articlesRequestLogged }) => {
     headers = await loginAndGetAuthorizationToken(request);
-    const responseArticle = await createArticleWithApi(request, headers);
+    const responseArticle = await createArticleWithApi(articlesRequestLogged);
 
     const article = await responseArticle.json();
     articleId = article.id;
   });
 
-  test('Should not create a comment without a logged-in user @GAD-R09-02', async ({ request }) => {
+  test('Should not create a comment without a logged-in user @GAD-R09-02', async ({
+    commentsRequest,
+  }) => {
     // Arrange
     const expectedStatusCode = 401;
     const commentData = prepareCommentPayload(articleId);
 
     // Act:
-    const response = await request.post(apiUrl.commentsUrl, {
-      data: commentData,
-    });
+    const response = await commentsRequest.post(commentData);
+
     // Assert:
     expect(response.status()).toBe(expectedStatusCode);
   });
 
-  test.beforeEach('Create a comment', async ({ request }) => {
+  test.beforeEach('Create a comment', async ({ commentsRequestLogged }) => {
     commentData = prepareCommentPayload(articleId);
-    responseComment = await createCommentWithApi(request, headers, articleId, commentData);
+    responseComment = await createCommentWithApi(commentsRequestLogged, articleId, commentData);
 
     // TODO linked issue
     await new Promise((resolve) => setTimeout(resolve, 5000));

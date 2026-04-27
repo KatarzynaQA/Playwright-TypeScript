@@ -1,10 +1,9 @@
 import { createArticleWithApi } from '@_src/api/factories/article-create.api.factory';
 import { prepareArticlePayload } from '@_src/api/factories/article-payload.api.factory';
-import { loginAndGetAuthorizationToken } from '@_src/api/factories/login-and-get-authorization-token.api';
 import { ArticlePayload } from '@_src/api/models/article-payload.api.models';
-import { Headers } from '@_src/api/models/headers.api.model';
-import { apiUrl } from '@_src/api/utils/api.utils';
-import { APIResponse, expect, test } from '@playwright/test';
+import { timestamp } from '@_src/api/utils/api.utils';
+import { expect, test } from '@_src/merge.fixture';
+import { APIResponse } from '@playwright/test';
 
 test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles' }, () => {
   const articleData = prepareArticlePayload();
@@ -12,14 +11,13 @@ test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles'
   test(
     'Should not create article without a logged-in user',
     { tag: '@GAD-R09-01' },
-    async ({ request }) => {
+    async ({ articlesRequest }) => {
       // Arrange:
       const expectedStatusCode = 401;
 
       // Act:
-      const response = await request.post(apiUrl.articlesUrl, {
-        data: articleData,
-      });
+      const response = await articlesRequest.post(articleData);
+
       // Assert:
       expect(response.status()).toBe(expectedStatusCode);
     },
@@ -27,20 +25,18 @@ test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles'
 
   test.describe('CRUD operations', () => {
     let responseArticle: APIResponse;
-    let headers: Headers;
+
     let articleData: ArticlePayload;
 
-    test.beforeAll('Should login', async ({ request }) => {
-      headers = await loginAndGetAuthorizationToken(request);
-    });
-
-    test('Should create an article with logged-in user @GAD-R08-03', async ({ request }) => {
+    test('Should create an article with logged-in user @GAD-R08-03', async ({
+      articlesRequestLogged,
+    }) => {
       // Arrange
       const expectedStatusCode = 201;
 
       //Act
       articleData = prepareArticlePayload();
-      responseArticle = await createArticleWithApi(request, headers, articleData);
+      responseArticle = await createArticleWithApi(articlesRequestLogged, articleData);
       // Assert
       const actualResponseStatus = responseArticle.status();
       expect(
@@ -56,19 +52,14 @@ test.describe('Verify articles CREATE operations', { tag: '@crud @api @articles'
     test(
       'Should create a new article when modified id not exist with logged-in user',
       { tag: '@GAD-R10-01' },
-      async ({ request }) => {
+      async ({ articlesRequestLogged }) => {
         // Arrange
         const expectedStatusCode = 201;
         const articleData = prepareArticlePayload();
+        const articleID = timestamp();
 
         // Act
-        const responseArticlePut = await request.put(
-          `${apiUrl.articlesUrl}/${new Date().valueOf()}`,
-          {
-            headers,
-            data: articleData,
-          },
-        );
+        const responseArticlePut = await articlesRequestLogged.put(articleID, articleData);
 
         // Assert
         const actualResponseStatus = responseArticlePut.status();

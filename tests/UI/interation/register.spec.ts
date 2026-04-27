@@ -1,5 +1,5 @@
+import { expect, test } from '@_src/merge.fixture';
 import { prepareRandomUserData } from '@_src/ui/factories/user.factory';
-import { expect, test } from '@_src/ui/fixtures/merge.fixture';
 
 test.describe('Verify register', { tag: '@GAD-R03 @S03' }, () => {
   test(
