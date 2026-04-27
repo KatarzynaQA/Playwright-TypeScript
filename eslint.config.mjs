@@ -35,7 +35,7 @@ export default [
     settings: {
       playwright: {
         globalAliases: {
-          test: ['setup'],
+          test: ['setup', 'healthCheck'],
         },
       },
     },

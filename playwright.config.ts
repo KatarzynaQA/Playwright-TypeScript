@@ -43,13 +43,19 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'health-check',
+      testMatch: '*.health.ts',
+    },
+    {
       name: 'api',
       testDir: './tests/API',
+      dependencies: ['health-check'],
     },
     {
       name: 'chromium-non-logged',
       grepInvert: /@logged/,
       testDir: './tests/UI',
+      dependencies: ['health-check'],
       use: { ...devices['Desktop Chrome'] },
     },
 
@@ -63,6 +69,7 @@ export default defineConfig({
     // },
     {
       name: 'setup',
+      dependencies: ['health-check'],
       testMatch: '*.setup.ts',
     },
     {
