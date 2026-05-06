@@ -1,0 +1,53 @@
+name: e2e Playwright GAD tests with ENV file
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+
+    services:
+      gad:
+        image: jaktestowac/gad:latest
+        ports:
+          - 3000:3000
+        env:
+          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create .env file
+        run: |
+          echo "BASE_URL=${{ vars.BASE_URL }}" >> .env
+          echo "USER_EMAIL=${{ secrets.USER_EMAIL }}" >> .env
+          echo "USER_PASSWORD=${{ secrets.USER_PASSWORD }}" >> .env
+          echo "Plik .env został utworzony pomyślnie."
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for GAD (Health Check)
+        run: |
+          for i in {1..10}; do
+            curl -s http://localhost:3000/api/health && break || sleep 2
+          done
+
+      - name: Run Playwright tests
+        run: npm run test
