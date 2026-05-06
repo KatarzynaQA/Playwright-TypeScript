@@ -18,6 +18,9 @@ jobs:
         image: jaktestowac/gad:latest
         ports:
           - 3000:3000
+        env:
+          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v4
