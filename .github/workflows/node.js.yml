@@ -37,7 +37,15 @@ jobs:
       - name: Run Playwright tests
         env:
           BASE_URL: ${{ vars.BASE_URL }}
-          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+          USER_EMAIL: ${{ secrets.USER_NAME }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
         run: |
           npm run test
+      - name: Archive test results
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-all-tests
+          path: |
+            playwright-report/**/*.*
+            test-results/**/*.*
